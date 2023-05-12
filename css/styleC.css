@@ -15,8 +15,8 @@ header{
 .wrapper{
     position: relative;
     width: 100vw;
-    height: 100vh; 
-    overflow-x: hidden;   
+    height: 100vh;
+    overflow-x: hidden;    
 }
 
 .logo{
@@ -139,37 +139,88 @@ header{
 
 
 
-.table{
+.upper-main{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-left:195px;
+    height: 150px;
+    width: calc(100vw - 195px);
+    border-bottom:1px solid #818181;
+    padding-right: 50px;
+    padding-left: 50px;
+}
+
+.upper-main a{
+    background-color: #818181 !important;
+
+}
+
+
+.my-chart{
+    top: 160px;
+    position: absolute;
+    height: 280px;
+    width: calc(100vw - 210px) !important;
+    left: 220px;
+}
+
+#myChart{
+    width: calc(100vw - 260px)!important;
+    height: 400px !important;
+    padding-bottom: 20px;
+}
+
+.dropdown {
     position: relative;
-    height: 100%;
-    top: 30px;
-    left: 195px;
-}
+    display: inline-block;
+    padding-left: calc(100vw - 400px);
+    
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 8px 0;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .dropdown:hover .dropdown-btn {
+    background-color: #3e8e41;
+  }
+  
+  .dropdown-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
 
-.table tbody tr.Low th:first-child {
-    background-color: #DFF0D8; /* Green for "Low" level */
-}
-
-.table tbody tr.Medium th:first-child {
-    background-color: #F3EDD2; /* Yellow for "Medium" level */
-}
-
-.table tbody tr.High th:first-child {
-    background-color: #F2DEDE; /* Red for "High" level */
-}
-
-.table thead th:nth-child(8) {
-    text-decoration-line: underline;
-    color: blue;
-}
-
-.table tbody tr td:nth-child(8) {
-    text-decoration-line: underline;
-}
-
-
-
-
+  .dropdown button{
+    background-color: white;
+    color: black;
+  }
 
 @media screen and (max-width:1207px){
     .profilePic img{
@@ -184,8 +235,18 @@ header{
         left: 10px;
     }
 
-    .table{
-        left: 0;
+    .upper-main{
+        margin-left: 0px;
+        width: 100vw;
+    }
+
+    .my-chart{
+        left: 10px;
+        
+    }
+
+    #myChart{
+        width: 90vw !important;
     }
 
     .d-flex{
@@ -195,17 +256,13 @@ header{
 }
 
 @media screen and (max-width:991px){
-
     .navigatin{
         left: 85vw;
     }
-
-
 }
 
-@media screen and (max-width:700px){
-    .responsive-cols {
+@media screen and (max-width:650px){
+    .breadcrumb{
         display: none;
-      }
+    }
 }
-

@@ -58,13 +58,15 @@
             <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
             <a href="#"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
             <a href="#"><i class="fa fa-user-o" aria-hidden="true"></i>Customers</a>
+            <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a></section>
+
         </div>
         <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
             </ol>
           </nav>
-        <table class="table">
+        <!-- <table class="table">
             <thead>
               <tr>
                 <th scope="col"></th>
@@ -128,6 +130,24 @@
                 <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
                 <td>Details</td>
               </tr>
+            </tbody>
+          </table> -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Date <button class="sort-button" data-column="date"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+                <th scope="col">Name <button class="sort-button" data-column="name"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+                <th class="responsive-cols" scope="col">AVG <button class="sort-button" data-column="avg"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+                <th class="responsive-cols" scope="col">Level <button class="sort-button" data-column="level"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+                <th class="responsive-cols" scope="col">Crop Type <button class="sort-button" data-column="crop-type"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+                <th scope="col">Summary</th>
+                <th scope="col">
+                  <button id="edit-button" class="btn btn-primary">Edit</button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
             </tbody>
           </table>
     </div>

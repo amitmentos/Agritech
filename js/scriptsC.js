@@ -93,14 +93,14 @@ var labels = ['2017', '2018', '2019', '2020', '2021', '2022', '2023'];
 var data = {
   labels: labels,
   datasets: [{
-    label: 'My First Dataset',
+    label: 'Total water use',
     data: [65, 68, 65, 61, 70, 74, 67],
     fill: false,
     borderColor: 'rgb(75, 192, 192)',
     tension: 0.1
   },
   {
-    label: 'My Second Dataset',
+    label: 'Total pest',
     data: [50, 55, 56, 75, 80, 75, 65],
     fill: false,
     borderColor: 'rgb(255, 99, 132)',

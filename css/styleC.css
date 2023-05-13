@@ -154,9 +154,14 @@ header{
 
 .upper-main a{
     background-color: #818181 !important;
-
+    border: none;
+    font-size: 16px;
+    width: 189px;
 }
 
+.upper-main a:hover{
+    background-color: #b4b4b4 !important;
+}
 
 .my-chart{
     top: 160px;
@@ -168,15 +173,21 @@ header{
 
 #myChart{
     width: calc(100vw - 260px)!important;
-    height: 400px !important;
+    height: 530px !important;
     padding-bottom: 20px;
+}
+.dropdown i{
+    font-size: 25px;
+    margin-right: 20px;
+    
 }
 
 .dropdown {
     position: relative;
-    display: inline-block;
-    padding-left: calc(100vw - 400px);
-    
+    display: flex;
+    padding-left: calc(100vw - 505px);
+    justify-content: center;
+    align-items: center; 
   }
   
   .dropdown-content {
@@ -218,8 +229,13 @@ header{
   }
 
   .dropdown button{
-    background-color: white;
+    background-color: white !important;
     color: black;
+  }
+
+  .dropdown button:hover{
+    background-color: #b4b4b4 !important;
+    color: black !important;
   }
 
 @media screen and (max-width:1207px){
@@ -245,6 +261,10 @@ header{
         
     }
 
+    .dropdown {
+        padding-left: calc(100vw - 220px);
+      }
+
     #myChart{
         width: 90vw !important;
     }
@@ -252,6 +272,9 @@ header{
     .d-flex{
         width: 450px;
         left: 20px;
+    }
+    .profilePic{
+        left: calc(100vw - 300px);
     }
 }
 

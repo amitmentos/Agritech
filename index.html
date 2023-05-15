@@ -12,15 +12,19 @@
     crossorigin="anonymous"></script>    
     <link href="css/style.css" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Passions+Conflict&display=swap');</style>
     <script defer="" src="js/scripts.js"></script>  
 
     <title>Agritech</title>
 </head>
 <body class="wrapper">
     <header>
-        <div class="logo">
-            <img src="images/logo.jpeg" alt="logo picture" title="logo">
-        </div>
+      <div class="profilePic">
+        <img src="images/profile.jpg" alt="logo picture" title="logo">
+    </div>
+      <div class="logo">
+        <a href="index.html" class="logo-link" title="logo"></a>
+      </div> 
         <div class="navigatin">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
@@ -34,23 +38,22 @@
                         <a class="nav-link" aria-current="page" href="#">Home</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" href="#">Violation</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="#">Drop</a>
+                        <a class="nav-link" href="#">Panalties</a>
                       </li>
                     </ul>
-                    <form class="d-flex" role="search">
+                    <form class="d-flex " role="search">
                       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                      <button class="btn btn-outline-success" type="submit">Search</button>
+                      <button class="btn btn-outline-success " type="submit">Search</button>
                     </form>
                   </div>
                 </div>
               </nav>
+              
         </div>
-        <div class="profilePic">
-            <img src="images/profile.jpg" alt="logo picture" title="logo">
-        </div>
+
     </header>
     <div class="main">
         <div class="side-menu">
@@ -66,19 +69,21 @@
               <li class="breadcrumb-item"><a href="#">Home</a></li>
             </ol>
           </nav>
-        <!-- <table class="table">
-            <thead>
-              <tr>
-                <th scope="col"></th>
-                <th scope="col">Date <i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
-                <th scope="col">Name <i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
-                <th class="responsive-cols" scope="col">AVG <i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
-                <th class="responsive-cols" scope="col">Level <i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
-                <th class="responsive-cols" scope="col">Crop Type <i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
-                <th scope="col">Summary</th>
-                <th scope="col">edit</th>
-              </tr>
-            </thead>
+        <table class="table" id="myTable">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Date <button class="sort-button" data-column="date"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+              <th scope="col">Name <button class="sort-button" data-column="name"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+              <th class="responsive-cols" scope="col">AVG <button class="sort-button" data-column="avg"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+              <th class="responsive-cols" scope="col">Level <button class="sort-button" data-column="level"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+              <th class="responsive-cols" scope="col">Crop Type </th>
+              <th scope="col">Summary</th>
+              <th scope="col">
+                <button id="edit-button" class="btn btn-primary Edit">Edit</button>
+              </th>
+            </tr>
+          </thead>
             <tbody>
               <tr>
                 <th scope="row">1</th>
@@ -88,7 +93,7 @@
                 <td class="responsive-cols">Low</td>
                 <td class="responsive-cols">Tomato</td>
                 <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
-                <td>Details</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
               </tr>
               <tr>
                 <th scope="row">2</th>
@@ -98,7 +103,7 @@
                 <td class="responsive-cols">Medium</td>
                 <td class="responsive-cols">Cotton</td>
                 <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
-                <td>Details</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
               </tr>
               <tr>
                 <th scope="row">3</th>
@@ -108,7 +113,7 @@
                 <td class="responsive-cols">Medium</td>
                 <td class="responsive-cols">Tomato</td>
                 <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
-                <td>Details</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
               </tr>
               <tr>
                 <th scope="row">4</th>
@@ -118,7 +123,7 @@
                 <td class="responsive-cols">Medium</td>
                 <td class="responsive-cols">Wheat</td>
                 <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
-                <td>Details</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
               </tr>
               <tr>
                 <th scope="row">5</th>
@@ -128,28 +133,82 @@
                 <td class="responsive-cols">High</td>
                 <td class="responsive-cols">Wheat</td>
                 <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
-                <td>Details</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
               </tr>
-            </tbody>
-          </table> -->
-          <table class="table">
-            <thead>
               <tr>
-                <th scope="col"></th>
-                <th scope="col">Date <button class="sort-button" data-column="date"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
-                <th scope="col">Name <button class="sort-button" data-column="name"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
-                <th class="responsive-cols" scope="col">AVG <button class="sort-button" data-column="avg"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
-                <th class="responsive-cols" scope="col">Level <button class="sort-button" data-column="level"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
-                <th class="responsive-cols" scope="col">Crop Type <button class="sort-button" data-column="crop-type"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
-                <th scope="col">Summary</th>
-                <th scope="col">
-                  <button id="edit-button" class="btn btn-primary">Edit</button>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+                <th scope="row">6</th>
+                <td>12/05/2023</td>
+                <td>Yitzhak Cohen</td>
+                <td class="responsive-cols">+20%</td>
+                <td class="responsive-cols">Medium</td>
+                <td class="responsive-cols">Oranges</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
+            </tr>
+            <tr>
+                <th scope="row">7</th>
+                <td>10/05/2023</td>
+                <td>Levi Ben-David</td>
+                <td class="responsive-cols">-5%</td>
+                <td class="responsive-cols">Low</td>
+                <td class="responsive-cols">Apples</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
+            </tr>
+            <tr>
+                <th scope="row">8</th>
+                <td>08/05/2023</td>
+                <td>Shimon Peretz</td>
+                <td class="responsive-cols">+22%</td>
+                <td class="responsive-cols">High</td>
+                <td class="responsive-cols">Avocados</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
+            </tr>
+            <tr>
+                <th scope="row">9</th>
+                <td>04/05/2023</td>
+                <td>Yosef Levi</td>
+                <td class="responsive-cols">+10%</td>
+                <td class="responsive-cols">Medium</td>
+                <td class="responsive-cols">Olives</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
+            </tr>
+            <tr>
+                <th scope="row">10</th>
+                <td>01/05/2023</td>
+                <td>David Ben-Gurion</td>
+                <td class="responsive-cols">+15%</td>
+                <td class="responsive-cols">Medium</td>
+                <td class="responsive-cols">Dates</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
+            </tr>
+            <tr>
+                <th scope="row">11</th>
+                <td>28/04/2023</td>
+                <td>Menachem Begin</td>
+                <td class="responsive-cols">-10%</td>
+                <td class="responsive-cols">Low</td>
+                <td class="responsive-cols">Grapes</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
+            </tr>
+            <tr>
+                <th scope="row">12</th>
+                <td>25/04/2023</td>
+                <td>Golda Meir</td>
+                <td class="responsive-cols">+18%</td>
+                <td class="responsive-cols">High</td>
+                <td class="responsive-cols">Pomegranates</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</td>
+                <td><a href="crop.html?prodId=1" class="btn btn-link Details">Details</a></td>
+            </tr>
+            
             </tbody>
           </table>
+
     </div>
 
 </body>

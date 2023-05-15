@@ -1,4 +1,4 @@
-* {
+/* * {
     margin: 0;
     padding: 0;
 }
@@ -10,6 +10,7 @@ header, main, footer, nav, aside, section, div  {
 header{
     height: 140px;
     border-bottom:1px solid #818181;
+    
 }
 
 .wrapper{
@@ -85,7 +86,7 @@ header{
 .side-menu {
     position: absolute;
     width: 195px;
-    height: 100%;
+    height: calc(100vh + 100px);
     left: 0;
     overflow-x: hidden;
     padding-top: 20px;
@@ -346,4 +347,4 @@ header{
     .breadcrumb{
         display: none;
     }
-}
+} */

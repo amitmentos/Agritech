@@ -245,17 +245,17 @@ header {
     height: 60px;
 }
 
-.table tbody tr.Low th:first-child {
+.table tbody tr.Low td:first-child {
     background-color: #DFF0D8;
     /* Green for "Low" level */
 }
 
-.table tbody tr.Medium th:first-child {
+.table tbody tr.Medium td:first-child {
     background-color: #F3EDD2;
     /* Yellow for "Medium" level */
 }
 
-.table tbody tr.High th:first-child {
+.table tbody tr.High td:first-child {
     background-color: #F2DEDE;
     /* Red for "High" level */
 }

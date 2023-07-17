@@ -19,6 +19,32 @@ header {
     background-color: #F7F6F6;
 }
 
+/* ------------------------------------- */
+.logIn_page{
+    background-image: url("../images/login.jpeg");
+}
+
+.logIn_form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 400px;
+    padding: 30px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: auto; /* to center within flex container */
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* ------------------------------------- */
+
 .wrapper {
     position: relative;
     width: 100vw;
@@ -31,38 +57,34 @@ header {
     position: relative;
     height: 140px;
     width: 195px;
-    /* border-bottom:1px solid #818181; */
 }
 
 .logo-link {
     display: inline-block;
-    /* Allows you to set width and height */
     width: 200px;
-    /* Width of the logo image */
     height: 100px;
-    /* Height of the logo image */
     background-image: url('../images/logo1.svg');
-    /* URL to the logo image */
     background-size: cover;
-    /* Ensures the image covers the full area of the logo-link */
     background-position: center;
-    /* Centers the image in the logo-link */
     background-repeat: no-repeat;
-    /* Prevents the image from repeating */
-    /* left: 10%; */
     top: 10%;
 }
 
 .profilePic {
     position: absolute;
-    right: 0;
-
+    right: 20px;
     top: 20px;
-    /* left: calc(100vw - 120px); */
     width: 80px;
     height: 80px;
-    width: 80px;
     height: 80px;
+}
+
+.logOut{
+    position: absolute;
+    right: 70px;
+    top: 65px;
+    color: #818181;
+    font-size: 13px;
 }
 
 .hide-search {
@@ -94,20 +116,16 @@ header {
 .navigatin a {
     border-right: 1px solid #818181;
     width: 90px;
-    /* background-color: white; */
 }
 
 .navbar {
     width: 600px;
     left: 0px;
-    /* background-color: white !important; */
     background-color: transparent;
     opacity: 1;
 }
 
 .container-fluid {
-    /* background-color: white; */
-    /* display: none; */
     background-color: transparent;
 }
 
@@ -163,7 +181,6 @@ header {
     border-top: 1px solid #818181;
     left: 15px;
     bottom: 0;
-    /* margin-top: 500px; */
     color: #818181;
 }
 
@@ -186,12 +203,10 @@ header {
 }
 
 .form-control {
-    /* background-color: #000000; */
     background: #FFFFFF;
     border: 1px solid rgba(196, 196, 196, 0.5);
     height: 48px;
     width: 100%;
-    /* Add this line */
 }
 
 .breadcrumb {
@@ -314,10 +329,24 @@ header {
     left: 220px;
 }
 
+.my-chart h2{
+    display: inline;
+    margin-right: 300px;
+    color: #818181;
+}
+
+.my-chart span{
+    color: #000000;
+}
+
 #myChart {
     width: calc(100vw - 260px) !important;
     height: 530px !important;
     padding-bottom: 20px;
+}
+
+.hide-chart2 {
+    display: none !important;
 }
 
 .dropdown i {
@@ -329,7 +358,7 @@ header {
 .dropdown {
     position: relative;
     display: flex;
-    padding-left: calc(100vw - 505px);
+    padding-left: calc(100vw - 535px);
     justify-content: center;
     align-items: center;
 }
@@ -384,10 +413,6 @@ header {
 
 
 .breadcrumb a {
-    /* position: relative;
-    font-family: 'Source Sans 3';
-    font-weight: 400;
-    font-size: 24px; */
     text-decoration: none;
     color: rgba(0, 0, 0, 0.6);
 
@@ -403,7 +428,6 @@ header {
 
 .newPenaltyH2 {
     position: absolute;
-    /* display: flex; */
     width: 600px;
     left: 2%;
     top: 0px;
@@ -430,14 +454,6 @@ header {
 }
 
 
-/* .form-label {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 20px;
-    color: #222222;
-} */
-
 .form-control {
     background: #FFFFFF;
     border: 1px solid rgba(196, 196, 196, 0.5);
@@ -450,9 +466,6 @@ header {
     margin-bottom: 3%;
 }
 
-/* .input-field {
-    margin-right: 25px;
-} */
 
 #inputAmount {
     width: 82px;
@@ -506,7 +519,6 @@ header {
     padding: 5px 8px;
     outline: none;
     white-space: nowrap;
-    /* -webkit-user-select: none; */
     cursor: pointer;
     text-shadow: 1px 1px #fff;
     font-weight: 700;
@@ -521,7 +533,17 @@ header {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
+#modalBtn{
+    width: 40px;
+    margin-right: 10px;
+    border: none !important;
+}
 
+@media screen and (max-width:1105px) {
+    .profilePic img {
+        display: none;
+    }
+}
 
 @media screen and (max-width:992px) {
 
@@ -560,21 +582,10 @@ header {
         left: 20px;
     }
 
-    /* .profilePic{
-        left: calc(100vw - 300px);
-    } */
-
-    .profilePic img {
-        display: none;
-    }
-
     .navigatin {
         left: 30px;
     }
 
-    /* .d-flex{
-        display: none !important;
-    } */
     .navigatin a {
         border: none;
     }
@@ -596,11 +607,7 @@ header {
 
     .logo {
         position: absolute;
-        /* left: 80%; */
         border-right: none;
-        /* border-left: 1px solid #818181; */
-        /* z-index: 30; */
-        /* right: 0; */
     }
 
     .table {
@@ -635,11 +642,6 @@ header {
         width: 100%;
     }
 
-    /* .input-row {
-        display: block;
-        width: 100%;
-    } */
-
     header {
         height: 60px;
     }
@@ -655,8 +657,6 @@ header {
     .logo {
         position: absolute;
         right: 0;
-        /* background-color: red; */
-        /* width: 160px; */
     }
 
     .navbar-toggler {
@@ -681,5 +681,19 @@ header {
 
     #btn4 {
      display: none;
+    }
+}
+
+
+@media screen and (max-width:470px) {
+    .hide-chart2 {
+        display: block !important;
+        width: calc(100vw - 50px) !important;
+        height: 400px !important;
+        padding-bottom: 20px;
+    }
+
+    .hide-chart{
+        display: none !important;
     }
 }

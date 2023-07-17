@@ -3,6 +3,13 @@
     padding: 0;
 }
 
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
 header, main, footer, nav, aside, section, div  {
     display: block;
 }
@@ -13,17 +20,21 @@ header{
     
 }
 
-.logIn_main{
+.logIn_page{
+    background-image: url("../images/login.jpeg");
+}
+
+.logIn_form{
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-content: center;
-    margin-top: 100px;
-    max-width: 400px;
+    width: 400px;
     padding: 30px;
     border: 1px solid #ccc;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: auto; /* to center within flex container */
 }
 
 .error-message {

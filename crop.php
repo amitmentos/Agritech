@@ -1,3 +1,35 @@
+<?php 
+	include "config.php";
+    $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+    
+    if(mysqli_connect_errno()) {
+        die("DB connection failed: " . mysqli_connect_error() . " (" . mysqli_connect_errno() . ")"
+        );
+    }
+?>
+<?php 
+  session_start();
+  if(!empty($_GET["plotName"])){
+    $plot_name = $_GET['plotName'];
+    $plot_size = $_GET['plotSize'];
+    $plot_id = $_GET['cropId'];
+    $query = "UPDATE tbl_229
+              SET plot_name = '$plot_name', plot_size = '$plot_size'
+              WHERE plot_id = $plot_id;";
+    
+    $result = mysqli_query($connection, $query);
+    if(!$result) {
+        die("DB query failed.");
+    }
+  }
+  if(!empty($_GET["cropId"])){
+    $plot_id = $_GET["cropId"];
+    $query = "SELECT * FROM tbl_229 WHERE plot_id = '$plot_id'";
+    $result = mysqli_query($connection, $query);
+    $row = mysqli_fetch_assoc($result);
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +52,7 @@
 <body class="wrapper">
     <header>
       <div class="logo">
-        <a href="index.html" class="logo-link"  title="logo"></a>
+        <a href="index.php" class="logo-link"  title="logo"></a>
       </div>   
         <div class="navigatin">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -50,7 +82,7 @@
               </nav>
         </div>
         <div class="profilePic">
-            <img src="images/profile.jpg" alt="logo picture" title="logo">
+            <img <?php echo 'src=' . $_SESSION['user_img']. ''?> alt="logo picture" title="logo">
         </div>
     </header>
     <div class="main">
@@ -58,7 +90,7 @@
             <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
             <a href="#"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
             <a href="#"><i class="fa fa-user-o" aria-hidden="true"></i>Customers</a>
-            <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a></section>
+            <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a><br><a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></section>
         </div>
         <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -83,19 +115,58 @@
       
       
         <div class="my-chart">
-          <h2>Total Use</h2>
-            <div class="dropdown">
-              <i class="fa fa-download" aria-hidden="true"></i>
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="timeRangeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                  All Times
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="timeRangeDropdown">
-                  <li><a class="dropdown-item" href="#" data-time-range="All Times">All Times</a></li>
-                  <li><a class="dropdown-item" href="#" data-time-range="months">Months</a></li>
-                  <li><a class="dropdown-item" href="#" data-time-range="days">Days</a></li>
-                </ul>
+          <h2>Total Use</h2><h2>Plot Name:<span><?php echo $row["plot_name"]?></span></h2><h2>Pest Size: <span><?php echo $row["plot_size"]?></span></h2>
+          <section>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Plot</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="#" method="GET" id="frm">
+                        
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="form2Example1">Plot Name:</label>
+                            <input type="text" class="form-control" name="plotName"  placeholder="name" required>
+                        </div>
+                        
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="form2Example2">Plot Size:</label>
+                            <input type="number" class="form-control" name="plotSize" placeholder="size" required>
+                        </div>
+                    
+                        <input type="text" name="cropId" <?php echo 'value="' . $row["plot_id"] . '"'; ?> hidden >
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
-            <canvas id="myChart"></canvas>
+          </section>
+            <div class="dropdown">
+              <?php if($_SESSION["user_type"]== "farmer") {echo '
+              <button id="modalBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+              </button>';}
+              ?>
+              <i class="fa fa-download" aria-hidden="true"></i>
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="timeRangeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                All Times
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="timeRangeDropdown">
+                <li><a class="dropdown-item" href="#" data-time-range="All-Times">All Times</a></li>
+                <li><a class="dropdown-item" href="#" data-time-range="months">Months</a></li>
+                <li><a class="dropdown-item" href="#" data-time-range="days">Days</a></li>
+              </ul>
+            </div>
+            <canvas id="myChart" class="hide-chart"></canvas>
+            <canvas id="myChart2" class="hide-chart2"></canvas>
         </div>
 
     </div>

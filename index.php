@@ -9,10 +9,10 @@
 ?>
 <?php 
   session_start();
+
   if (!isset($_SESSION["user_id"]) || empty($_SESSION["user_id"])) {
-    // Redirect the user to the login page
     header("Location: login.php");
-    exit; // Make sure to include this to prevent further execution of the code
+    exit; 
   }
 	if (!empty($_SERVER['QUERY_STRING'])) {
 		$cat = $_GET['category'];
@@ -56,8 +56,8 @@
 <body class="wrapper">
     <header>
       <div class="profilePic">
-        <img src="images/profile.jpg" alt="logo picture" title="logo">
-    </div>
+        <img <?php echo 'src=' . $_SESSION['user_img']. ''?> alt="logo picture" title="logo">
+      </div>
       <div class="logo">
         <a href="index.html" class="logo-link" title="logo"></a>
       </div> 
@@ -93,12 +93,10 @@
     </header>
     <div class="main">
         <div class="side-menu">
-            <!-- <a href="#">Home</a> -->
             <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
             <a href="#"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
             <a href="#"><i class="fa fa-user-o" aria-hidden="true"></i>Customers</a>
-            <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a></section>
-
+            <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a><br><a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></section>
         </div>
         <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -131,7 +129,7 @@
                   echo '<td class="responsive-cols">' . $row['level'] . '</td>';
                   echo '<td class="responsive-cols">' . $row['crop_type'] . '</td>';
                   echo '<td>' . $row['summary'] . '</td>';
-                  echo '<td><a href="crop.html?cropId=' . $row['plot_id'] . '" class="btn btn-link Details">Details</a></td>';
+                  echo '<td><a href="crop.php?cropId=' . $row['plot_id'] . '" class="btn btn-link Details">Details</a></td>';
                   echo '</tr>';
                 }
             ?>     

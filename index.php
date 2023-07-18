@@ -59,7 +59,7 @@
         <img <?php echo 'src=' . $_SESSION['user_img']. ''?> alt="logo picture" title="logo">
       </div>
       <div class="logo">
-        <a href="index.html" class="logo-link" title="logo"></a>
+        <a href="index.php" class="logo-link" title="logo"></a>
       </div> 
         <div class="navigatin">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">

@@ -1,3 +1,51 @@
+<?php 
+	include "config.php";
+    $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+    
+    if(mysqli_connect_errno()) {
+        die("DB connection failed: " . mysqli_connect_error() . " (" . mysqli_connect_errno() . ")"
+        );
+    }
+?>
+
+<?php 
+  session_start();
+  if (!isset($_SESSION["user_id"]) || empty($_SESSION["user_id"])) {
+    header("Location: index.php");
+    exit; 
+  }
+  if (empty($_GET["cropId"])) {
+    header("Location: index.php");
+  }
+  if(!empty($_POST["inspName"])){
+    $farmer_name = $_POST["farmerName"];
+    $dueDate = $_POST["inputDue"];
+    $amount = intval($_POST["inputAmount"]);
+    $summery = $_POST["description"];
+    $plot_id = intval($_POST['cropId']);
+    $inspector_id = intval([$_SESSION["user_id"]]);
+    $farmer_id = intval($_POST['farmerId']);
+
+    $query = "INSERT INTO tbl_229_penalty (plot_id, inspector_id, farmer_id, PaymentDueDate, Amount, summery, `current_date`)
+    VALUES ('$plot_id', '$inspector_id', '$farmer_id', '$dueDate', '$amount', '$summery', NOW());";
+
+    $result = mysqli_query($connection, $query);
+    if(!$result) {
+        die("DB query failed.");
+    }
+    header("Location: index.php");
+  }
+
+  if(!empty($_GET["cropId"])){
+    $plot_id = $_GET["cropId"];
+    $query = "SELECT * FROM tbl_229 WHERE plot_id = '$plot_id'";
+    $result = mysqli_query($connection, $query);
+    $row = mysqli_fetch_assoc($result);
+  }
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +67,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Passions+Conflict&display=swap');
   </style>
 
-  <script defer="" src="js/scriptsN.js"></script>
+  <!-- <script defer="" src="js/scriptsN.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
   <title>Agritech</title>
 </head>
@@ -27,7 +75,7 @@
 <body class="wrapper">
   <header>
     <div class="logo">
-      <a href="index.html" class="logo-link" title="logo"></a>
+      <a href="index.php" class="logo-link" title="logo"></a>
     </div>
     <div class="navigatin">
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -41,7 +89,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                <a class="nav-link" aria-current="page" href="index.php">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Violation </a>
@@ -59,7 +107,7 @@
       </nav>
     </div>
     <div class="profilePic">
-      <img src="images/profile.jpg" alt="logo picture" title="logo">
+      <img <?php echo 'src=' . $_SESSION['user_img']. ''?> alt="logo picture" title="logo">
     </div>
   </header>
   <div class="main">
@@ -85,48 +133,45 @@
       <div class="newPenaltyH2">New Penalty
         <p>The penalty will be send to the farmer in 24 hours</p>
       </div>
-      <form action="http://se.shenkar.ac.il/students/2022-2023/web1/dev_229/newPenaltyData.php" method="post" enctype="multipart/form-data">
-
-        <!-- First row -->
+      <form action="#" method="post" enctype="multipart/form-data">
         <div class="row">
           <div class="col-sm-4">
-            <label for="inputName" class="form-label">Farmer name</label>
-            <input type="text" class="form-control input-field" id="inputName" name="inputName"
-              placeholder="Enter farmer name">
+            <label for="farmerName" class="form-label">Farmer name</label>
+            <input type="text" class="form-control input-field" id="inputName" name="farmerName"
+              placeholder="name">
           </div>
           <div class="col-sm-6">
-            <label for="inputEmail4" class="form-label">Farmer email</label>
-            <input type="email" class="form-control input-field" id="inputEmail4" name="inputEmail4"
-              placeholder="Enter farmer email">
+            <label for="inspName" class="form-label">Inspector Name</label>
+            <input type="text" class="form-control input-field" id="inspName" name="inspName"
+              placeholder="name">
           </div>
         </div>
         <!-- Second row -->
         <div class="row">
           <div class="col-sm-6">
-            <label for="inputPhone" class="form-label">Telephone</label>
-            <input type="tel" class="form-control input-field" id="inputPhone" name="inputPhone"
-              placeholder="Enter farmer phone number" pattern="^[0-9]{9,10}$"
-              title="Please enter 9 or 10 digits without a dash" required>
+            <label for="inputDue" class="form-label">Payment Due Date</label>
+            <input type="date" class="form-control input-field" id="inputDue" name="inputDue"
+              placeholder="dd-mm-yyyy" required>
           </div>
           <div class="col-sm-6">
             <label for="inputAmount" class="form-label">Amount</label>
-            <input type="text" class="form-control input-field" id="inputAmount" name="inputAmount"
-              pattern="[1-9][0-9]{0,3}" title="Please enter a number between 1-9999" placeholder="#">
+            <input type="number" class="form-control input-field" id="inputAmount" name="inputAmount"
+              pattern="[1-9][0-9]{0,3}"  placeholder="$">
           </div>
         </div>
-
-
         <div class="mb-3">
-          <label for="exampleFormControlTextarea1" class="form-label">Describe</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" name="exampleFormControlTextarea1" rows="3"
+          <label for="description" class="form-label">Describe</label>
+          <textarea class="form-control" id="description" name="description"
             placeholder="More details..."></textarea>
         </div>
+        <input type="text" name="cropId" <?php echo 'value="' . $_GET["cropId"] . '"'; ?> hidden >
+        <input type="hidden" name="farmerId" value="<?php echo $row['user_id']; ?>" hidden>
         <div class="newPenaltyButton">
           <div id="BACK" class="col-md-6">
             <button type="button" class="btn btn-primary" onclick="window.location.href='index.html'">BACK</button>
           </div>
           <div id="SUBMIT" class="col-6 ms-auto">
-            <button type="submit" class="btn btn-primary" value="send">SUBMIT</button>
+            <button type="submit" class="btn btn-primary">SUBMIT</button>
           </div>
         </div>
       </form>

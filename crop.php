@@ -22,6 +22,17 @@
         die("DB query failed.");
     }
   }
+  if(!empty($_GET["selectYes"])){
+    $plot_id = $_GET['cropId'];
+    $query = "DELETE FROM tbl_229
+              WHERE plot_id = $plot_id;";
+    
+    $result = mysqli_query($connection, $query);
+    if(!$result) {
+        die("DB query failed.");
+    }
+    header("Location: index.php");
+  }
   if(!empty($_GET["cropId"])){
     $plot_id = $_GET["cropId"];
     $query = "SELECT * FROM tbl_229 WHERE plot_id = '$plot_id'";
@@ -64,7 +75,7 @@
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                       <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link" aria-current="page" href="index.php">Home</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link" href="#">Violation</a>
@@ -100,48 +111,76 @@
         </nav>
         <div class="upper-main row ">
           <div class="col-12 col-sm-6 col-md-3">
-              <a id="btn1" href="#" class="btn btn-primary btn-lg active upperGraphButtons" role="button" aria-pressed="true">USAGE EXCEPTIONS</a>
+              <a id="btn1" href="#" class="btn btnCrop btn-primary btn-lg active upperGraphButtons" role="button" aria-pressed="true">EXCEPTIONS</a>
           </div>
           <div class="col-12 col-sm-6 col-md-3">
-              <a id="btn2" href="#" class="btn btn-primary btn-lg active upperGraphButtons" role="button" aria-pressed="true">REPORTS</a>
+              <a id="btn2" href="#" class="btn btnCrop btn-primary btn-lg active upperGraphButtons" role="button" aria-pressed="true">REPORTS</a>
           </div>
           <div class="col-12 col-sm-6 col-md-3">
-              <a id="btn3" href="newPanelty.html?prodId=1" class="btn btn-primary btn-lg active upperGraphButtons" role="button" aria-pressed="true" >NEW PENALTY</a>
+          <?php if($_SESSION["user_type"]== "farmer"){
+            echo '<a id="btn3" href="newPlot.php? cropId= '. $row["plot_id"] .' " class="btn btnCrop btn-primary btn-lg active upperGraphButtons" role="button" aria-pressed="true" >NEW PLOT</a>'; 
+          }else{
+            echo '<a id="btn3" href="newPanelty.php?cropId= '. $row["plot_id"] .'" class="btn btnCrop btn-primary btn-lg active upperGraphButtons" role="button" aria-pressed="true" >NEW PENALTY</a>';
+          }?>
           </div>
           <div class="col-12 col-sm-6 col-md-3">
-              <a id="btn4" href="#" class="btn btn-primary btn-lg active upperGraphButtons" role="button" aria-pressed="true" >CONTACTS</a>
+              <a id="btn4" href="#" class="btn btnCrop btn-primary btn-lg active upperGraphButtons" role="button" aria-pressed="true" >CONTACTS</a>
           </div>
       </div>
       
       
         <div class="my-chart">
-          <h2>Total Use</h2><h2>Plot Name:<span><?php echo $row["plot_name"]?></span></h2><h2>Pest Size: <span><?php echo $row["plot_size"]?></span></h2>
+          <h2>Total Use</h2><h2 class= "responsive" >Plot Name:<span><?php echo $row["plot_name"]?></span></h2><h2 class= "responsive">Pest Size: <span><?php echo $row["plot_size"]?></span></h2>
           <section>
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Plot</h5>
+                    <h5 class="modal-title" id="editModal">Edit Plot</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
                     <form action="#" method="GET" id="frm">
                         
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="form2Example1">Plot Name:</label>
+                            <label class="form-label" for="plotName">Plot Name:</label>
                             <input type="text" class="form-control" name="plotName"  placeholder="name" required>
                         </div>
                         
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="form2Example2">Plot Size:</label>
+                            <label class="form-label" for="plotSize">Plot Size:</label>
                             <input type="number" class="form-control" name="plotSize" placeholder="size" required>
                         </div>
                     
                         <input type="text" name="cropId" <?php echo 'value="' . $row["plot_id"] . '"'; ?> hidden >
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
+                          <button type="button" id="ModalBtnN" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" id="ModalBtnY" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="removeModal" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="removeModal">Remove Plot</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="#" method="GET" id="frm">
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="plotName">Are You Sure You Want To Delete This Plot?</label>
+                        </div>
+                        <input type="text" name="cropId" <?php echo 'value="' . $row["plot_id"] . '"'; ?> hidden >
+                        <input type="text" name="selectYes" value="1" hidden >
+                        <div class="modal-footer">
+                          <button type="button" id="ModalBtnN" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" id="ModalBtnY" class="btn btn-primary">Save changes</button>
                         </div>
                     </form>
                   </div>
@@ -151,9 +190,12 @@
           </section>
             <div class="dropdown">
               <?php if($_SESSION["user_type"]== "farmer") {echo '
-              <button id="modalBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              <i class="fa fa-pencil" aria-hidden="true"></i>
-              </button>';}
+                <button id="modalBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#removeModal">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
+                <button id="modalBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+                </button>';}
               ?>
               <i class="fa fa-download" aria-hidden="true"></i>
               <button class="btn btn-secondary dropdown-toggle" type="button" id="timeRangeDropdown" data-bs-toggle="dropdown" aria-expanded="false">

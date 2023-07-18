@@ -42,7 +42,52 @@ header {
     font-size: 14px;
     margin-top: 10px;
 }
+/*--------------------------------------*/
+.card {
+    margin-top: 100px;
+    margin-bottom: 20px;
+    margin-left: 200px;
+  }
 
+
+.card a{
+  color: black;
+}
+
+
+.card a {
+    background-color: none;
+    color: black;
+}
+
+.btn-primary {
+  --bs-btn-bg: none !important;
+  --bs-btn-border-color:black;
+  
+}
+
+.btn-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card span{
+color: #999;
+
+}
+
+.card-red {
+    color: #f90d0d;
+}
+
+.card-yellow {
+    color: #e9e90d;
+}
+
+.card-green {
+    color: #22aa22;
+}
 /* ------------------------------------- */
 
 .wrapper {
@@ -325,13 +370,13 @@ header {
     top: 160px;
     position: absolute;
     height: 280px;
-    width: calc(100vw - 210px) !important;
+    width: calc(100vw) !important;
     left: 220px;
 }
 
 .my-chart h2{
     display: inline;
-    margin-right: 300px;
+    margin-right: 200px;
     color: #818181;
 }
 
@@ -357,8 +402,8 @@ header {
 
 .dropdown {
     position: relative;
-    display: flex;
-    padding-left: calc(100vw - 535px);
+    display: block;
+    left: calc(100vw - 530px);
     justify-content: center;
     align-items: center;
 }
@@ -467,11 +512,11 @@ header {
 }
 
 
-#inputAmount {
+#inputSize {
     width: 82px;
 }
 
-#exampleFormControlTextarea1 {
+#description {
     width: 100%;
     height: 75px;
 }
@@ -539,9 +584,32 @@ header {
     border: none !important;
 }
 
-@media screen and (max-width:1105px) {
+#ModalBtnY{
+    --bs-btn-bg:#DFF0D8 !important;
+    border: none !important;
+    color: #6c757d;
+}
+
+#ModalBtnY:hover{
+    background-color: #b4b4b4;
+}
+
+#ModalBtnN{
+    --bs-btn-bg:#F2DEDE;
+    border: none !important;
+    color: #6c757d;
+}
+
+#ModalBtnN:hover{
+    background-color: #b4b4b4;
+}
+
+@media screen and (max-width:1115px) {
     .profilePic img {
         display: none;
+    }
+    .responsive{
+        display: none !important;
     }
 }
 
@@ -570,7 +638,7 @@ header {
     }
 
     .dropdown {
-        padding-left: calc(100vw - 220px);
+        left: 5px;
     }
 
     #myChart {
@@ -636,11 +704,6 @@ header {
         align-items: start;
     }
 
-    .input-field,
-    #exampleFormControlTextarea1 {
-        display: block;
-        width: 100%;
-    }
 
     header {
         height: 60px;
@@ -678,9 +741,14 @@ header {
         height: 6vh;
         font-size: 16px;
     }
-
-    #btn4 {
-     display: none;
+    .btnCrop{
+        width: 120px !important;
+    }
+    .col-12{
+        width: 120px !important;
+    }
+    .d-flex {
+        display: none !important;
     }
 }
 
@@ -696,4 +764,8 @@ header {
     .hide-chart{
         display: none !important;
     }
+
+    .card {
+        margin-left: 50px !important;
+      }
 }

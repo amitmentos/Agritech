@@ -119,12 +119,9 @@ $query = "INSERT INTO tbl_229 (user_id, plot_name, AVG, level, crop_type, plot_s
   <div class="main">
     <div class="side-menu">
       <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
-      <a href="#"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
+      <a href="penaltyList.php"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
       <a href="#"><i class="fa fa-user-o" aria-hidden="true"></i>Customers</a>
-      <section class="userTool" aria-label="User Tools">
-        <a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br>
-        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a>
-      </section>
+      <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a><br><a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></section>
     </div>
     <nav
       style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
@@ -166,7 +163,7 @@ $query = "INSERT INTO tbl_229 (user_id, plot_name, AVG, level, crop_type, plot_s
           <div class="col-sm-6">
             <label for="inputSize" class="form-label">Plot size</label>
             <input type="number" class="form-control input-field" id="inputSize" name="inputSize"
-              pattern="[1-9][0-9]{0,3}"  placeholder="size" required>
+              min="1" placeholder="size" required>
           </div>
         </div>
         <div class="mb-3">

@@ -45,29 +45,14 @@ header {
 }
 
 /*--------------------------------------*/
-.card-img-top{
-    width: 100%;
-    height: 270px;
-    object-fit: cover;
-}
-.card-body-up {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    /* height: 130px; */
-    overflow: hidden;
-    /* white-space: nowrap; */
-}
+
 .card a {
     background-color: none;
     color: black;
 }
 
 .card-text {
-    display: flex;
     text-overflow: ellipsis;
-    flex-wrap: wrap;
-
 }
 
 a.card-link {
@@ -82,12 +67,9 @@ a.card-link {
     --bs-btn-hover-bg: #f1f1f1 !important ;
     --bs-btn-color: black !important;
     --bs-btn-hover-border-color:black;
-}
-
-#loginBtn1{
     margin-left: 130px;
-}
-
+  }
+  
 .btn-center {
     display: flex;
     justify-content: center;
@@ -126,6 +108,8 @@ a.card-link {
     color: #000000;
     font-size: 22px;
 }
+
+
 
 /* #labelEdit{
     margin-left: 60px;
@@ -209,12 +193,11 @@ a.card-link {
     margin-top: 40px;
     display: flex;
     justify-content: center;
-    /* justify-content: space-between; */
-    align-items: flex-start;
+    align-items: center;
     flex-direction: row;
     padding: 0;
     padding-bottom: 50px;
-    gap: 50px;
+    gap: 20px;
     flex-wrap: wrap;
 }
 
@@ -254,6 +237,7 @@ a.card-link {
     padding-top: 20px;
     height: 100vh;
     /* border-right:1px solid #818181; */
+    /* background-color: #F7F6F6; */
     background-color: #F7F6F6;
 }
 
@@ -277,7 +261,6 @@ a.card-link {
 
 .userTool {
     position: absolute;
-    top: 200px;
     width: 160px;
     height: 100px;
     border-top: 1px solid #818181;
@@ -312,7 +295,14 @@ a.card-link {
     width: 100%;
 }
 
-
+.card-body-up {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+}
 
 .breadcrumb {
     position: absolute;
@@ -526,7 +516,7 @@ a.card-link {
 
 .newPenalty {
     position: relative;
-    /* left: 200px; */
+    left: 200px;
     top: 30px;
     width: calc(100vh - 128px);
 }
@@ -834,9 +824,5 @@ a.card-link {
 
     .hide-chart {
         display: none !important;
-    }
-
-    .logIn_form{
-        margin-top: 120px;
     }
 }

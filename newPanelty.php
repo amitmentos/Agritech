@@ -23,7 +23,7 @@
     $amount = intval($_POST["inputAmount"]);
     $summery = $_POST["description"];
     $plot_id = intval($_POST['cropId']);
-    $inspector_id = intval([$_SESSION["user_id"]]);
+    $inspector_id = intval($_SESSION["user_id"]);
     $farmer_id = intval($_POST['farmerId']);
 
     $query = "INSERT INTO tbl_229_penalty (plot_id, inspector_id, farmer_id, PaymentDueDate, Amount, summery, `current_date`)
@@ -80,7 +80,6 @@
     <div class="navigatin">
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-          <!-- <a class="nav-link" href="#">Navbar</a> -->
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -112,14 +111,10 @@
   </header>
   <div class="main">
     <div class="side-menu">
-      <!-- <a href="#">Home</a> -->
       <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
-      <a href="#"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
+      <a href="penaltyList.php"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
       <a href="#"><i class="fa fa-user-o" aria-hidden="true"></i>Customers</a>
-      <section class="userTool" aria-label="User Tools">
-        <a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br>
-        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a>
-      </section>
+      <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a><br><a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></section>
     </div>
     <nav
       style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
@@ -161,8 +156,7 @@
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Describe</label>
-          <textarea class="form-control" id="description" name="description"
-            placeholder="More details..."></textarea>
+          <textarea class="form-control" id="description" name="description" placeholder="More details..."></textarea>
         </div>
         <input type="text" name="cropId" <?php echo 'value="' . $_GET["cropId"] . '"'; ?> hidden >
         <input type="hidden" name="farmerId" value="<?php echo $row['user_id']; ?>" hidden>

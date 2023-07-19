@@ -1,31 +1,87 @@
 <?php
-    include 'config.php';
-    session_start();
-    if(!empty($_SESSION["user_id"])){
-        session_destroy();
-    }
-    
-    if(!empty($_POST["loginMail"])){
-        $query  = "SELECT * FROM tbl_229_users 
-        WHERE email='" . $_POST["loginMail"] 
-        . "'and password = '" 
+include 'config.php';
+session_start();
+if (!empty($_SESSION["user_id"])) {
+    session_destroy();
+}
+
+if (!empty($_POST["loginMail"])) {
+    $query = "SELECT * FROM tbl_229_users 
+        WHERE email='" . $_POST["loginMail"]
+        . "'and password = '"
         . $_POST["loginPass"] . "'";
 
-        $result = mysqli_query($connection , $query);
-        $row    = mysqli_fetch_array($result); 
+    $result = mysqli_query($connection, $query);
+    $row = mysqli_fetch_array($result);
 
-        if(is_array($row)) {
-            $_SESSION["user_id"] = $row['ID'];
-            $_SESSION["user_type"] = $row['user_type'];
-            $_SESSION["user_img"] = $row['profile_url'];
-            $_SESSION["login"] = true;
-            header('Location: ' . URL . 'index.php');
+    if (is_array($row)) {
+        $_SESSION["user_id"] = $row['ID'];
+        $_SESSION["user_type"] = $row['user_type'];
+        $_SESSION["user_img"] = $row['profile_url'];
+        $_SESSION["login"] = true;
+        header('Location: ' . URL . 'index.php');
+    } else {
+        $message = 'invail username or password';
+    }
+}
+?>
+<?php
+if (!empty($_POST["userEmail"])) {
+    $user_name = $_POST["userName"];
+    $user_email = $_POST["userEmail"];
+    $user_password = $_POST["userPassword"];
+    $user_type = $_POST["userType"];
+    echo $user_email;
+    // Check if file was uploaded
+    if (isset($_FILES['userImage'])) {
+        $errors = array();
+        $file_name = $_FILES['userImage']['name'];
+        $file_size = $_FILES['userImage']['size'];
+        $file_tmp = $_FILES['userImage']['tmp_name'];
+        $file_type = $_FILES['userImage']['type'];
+
+        $file_ext = strtolower(end(explode('.', $_FILES['userImage']['name'])));
+        $extensions = array("jpeg", "jpg", "png");
+
+        if (in_array($file_ext, $extensions) === false) {
+            $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
+        }
+
+        if ($file_size > 2097152) {
+            $errors[] = 'File size must be less than 2 MB';
+        }
+
+        if (empty($errors) == true) {
+            $file_name_new = uniqid('', true) . '.' . $file_ext;
+            $file_destination = 'images/' . $file_name_new;
+
+            move_uploaded_file($file_tmp, $file_destination);
         } else {
-            $message = 'invail username or password';
+            $file_destination = 'images/defaultProfilePic.jpg';
+            move_uploaded_file($file_tmp,'images/defaultProfilePic.jpg');
+            print_r($errors);
         }
     }
-?>
 
+    $query = "INSERT INTO tbl_229_users (`name`, email, `password`, user_type, profile_url)
+    VALUES ('$user_name','$user_email', '$user_password', '$user_type', '$file_destination')";
+
+
+
+    $result = mysqli_query($connection, $query);
+    if (!$result) {
+        die("DB query failed.");
+    }
+    header("Location: index.php");
+}
+
+if (!empty($_GET["cropId"])) {
+    $plot_id = $_GET["cropId"];
+    $query = "SELECT * FROM tbl_229 WHERE plot_id = '$plot_id'";
+    $result = mysqli_query($connection, $query);
+    $row = mysqli_fetch_assoc($result);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,9 +102,59 @@
 </head>
 
 <body class="logIn_page">
-        <div class="logo">
-            <a href="login.php" class="logo-link" title="logo"></a>
-        </div> 
+    <div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="removeModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">Sign Up</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" method="POST" id="signup_form" enctype="multipart/form-data">
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="userName">Name:</label>
+                            <input type="text" class="form-control input-field" name="userName" id="userName"
+                                placeholder="enter your name" required>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="userEmail">Email address:</label>
+                            <input type="email" class="form-control input-field" name="userEmail" id="userEmail"
+                                placeholder="enter your email" required>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="userPassword">Password:</label>
+                            <input type="password" class="form-control input-field" name="userPassword"
+                                id="userPassword" placeholder="enter your password" required>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="userType">User Type:</label>
+                            <select class="form-control input-field" name="userType" >
+                                <option value="insp">Inspector</option>
+                                <option value="farmer">Farmer</option>
+                            </select>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="userImage">Profile Image:</label>
+                            <input type="file" class="form-control" name="userImage" id="userImage">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo">
+        <a href="login.php" class="logo-link" title="logo"></a>
+    </div>
     <div class="logIn_form">
         <h1 class="mb-4">Login</h1>
         <form action="#" method="post" id="frm">
@@ -60,18 +166,18 @@
             <!-- Password input -->
             <div class="form-outline mb-4">
                 <label class="form-label" for="form2Example2">Password:</label>
-                <input type="password" class="form-control" name="loginPass" id="loginPass" placeholder="password" required>
+                <input type="password" class="form-control" name="loginPass" id="loginPass" placeholder="password"
+                    required>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+            <button type="submit" id="loginBtn1" class="btn btn-primary btn-block mb-4">Sign in</button>
 
             <!-- Register buttons -->
             <div class="text-center">
-                <p>Not a member? <a href="#!">Register</a></p>
+                <p>Not a member? <a href="#" data-bs-toggle="modal" data-bs-target="#removeModal">Register</a></p>
             </div>
         </form>
     </div>
 </body>
 
 </html>
-

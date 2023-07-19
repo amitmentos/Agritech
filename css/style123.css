@@ -20,11 +20,11 @@ header {
 }
 
 /* ------------------------------------- */
-.logIn_page {
+.logIn_page{
     background-image: url("../images/login.jpeg");
 }
 
-.logIn_form {
+.logIn_form{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,8 +34,7 @@ header {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: auto;
-    /* to center within flex container */
+    margin: auto; /* to center within flex container */
 }
 
 .error-message {
@@ -44,58 +43,47 @@ header {
     margin-top: 10px;
 }
 
+
 /*--------------------------------------*/
-.card-img-top{
-    width: 100%;
-    height: 270px;
-    object-fit: cover;
-}
-.card-body-up {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    /* height: 130px; */
-    overflow: hidden;
-    /* white-space: nowrap; */
-}
+/* .card {
+    margin-top: 100px;
+    margin-bottom: 20px;
+    margin-left: 200px;
+  } */
+
+
 .card a {
     background-color: none;
     color: black;
 }
 
 .card-text {
-    display: flex;
     text-overflow: ellipsis;
-    flex-wrap: wrap;
-
 }
 
-a.card-link {
+a.card-link{
     color: blue !important;
     text-decoration: none;
 }
 
 .btn-primary {
-    --bs-btn-bg: none !important;
-    --bs-btn-border-color:black;
-    --bs-btn-hover-color: black !important;
-    --bs-btn-hover-bg: #f1f1f1 !important ;
-    --bs-btn-color: black !important;
-    --bs-btn-hover-border-color:black;
-}
-
-#loginBtn1{
-    margin-left: 130px;
+  --bs-btn-bg: none !important;
+  --bs-btn-border-color:black;
+  --bs-btn-hover-color: black !important;
+  --bs-btn-hover-bg: #f1f1f1 !important ;
+  --bs-btn-color: black !important;
+  --bs-btn-hover-border-color:black;
+  margin-left: 130px;
 }
 
 .btn-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.card span {
-    color: #999;
+.card span{
+color: #999;
 
 }
 
@@ -110,26 +98,21 @@ a.card-link {
 .card-green {
     color: #22aa22;
 }
-
 /* ------------------------------------- */
 
-.editPenalty {
+.editPenalty{
     position: relative;
     top: 30px;
     left: 220px;
 }
 
-.modalBtn2 {
+.modalBtn2{
     width: 40px;
     margin-right: 10px;
     border: none !important;
     color: #000000;
     font-size: 22px;
 }
-
-/* #labelEdit{
-    margin-left: 60px;
-} */
 
 /*--------------------------------------- */
 .wrapper {
@@ -166,7 +149,7 @@ a.card-link {
     height: 80px;
 }
 
-.logOut {
+.logOut{
     position: absolute;
     right: 70px;
     top: 65px;
@@ -205,19 +188,6 @@ a.card-link {
     width: 90px;
 }
 
-.container {
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    /* justify-content: space-between; */
-    align-items: flex-start;
-    flex-direction: row;
-    padding: 0;
-    padding-bottom: 50px;
-    gap: 50px;
-    flex-wrap: wrap;
-}
-
 .navbar {
     width: 600px;
     left: 0px;
@@ -248,11 +218,11 @@ a.card-link {
 .side-menu {
     position: sticky;
     width: 195px;
-    top: 0;
+    height: 100vh;
     left: 0;
+    top: 0;
     overflow-x: hidden;
     padding-top: 20px;
-    height: 100vh;
     /* border-right:1px solid #818181; */
     background-color: #F7F6F6;
 }
@@ -275,9 +245,20 @@ a.card-link {
 
 }
 
+.container {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    padding: 0;
+    padding-bottom: 50px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
 .userTool {
     position: absolute;
-    top: 200px;
     width: 160px;
     height: 100px;
     border-top: 1px solid #818181;
@@ -301,8 +282,6 @@ a.card-link {
     display: flex;
     width: 100vw;
     /* height: calc(100vh - 128px); */
-
-
 }
 
 .form-control {
@@ -312,7 +291,14 @@ a.card-link {
     width: 100%;
 }
 
-
+.card-body-up {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+}
 
 .breadcrumb {
     position: absolute;
@@ -337,7 +323,7 @@ a.card-link {
     position: relative;
     height: 100vh;
     top: 30px;
-    /* left: 195px; */
+    left: 195px;
     width: 85%;
 }
 
@@ -404,7 +390,7 @@ a.card-link {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    /* margin-left: 195px; */
+    margin-left: 195px;
     height: 150px;
     width: calc(100vw - 195px);
     border-bottom: 1px solid #818181;
@@ -434,13 +420,13 @@ a.card-link {
     left: 220px;
 }
 
-.my-chart h2 {
+.my-chart h2{
     display: inline;
     margin-right: 200px;
     color: #818181;
 }
 
-.my-chart span {
+.my-chart span{
     color: #000000;
 }
 
@@ -526,7 +512,7 @@ a.card-link {
 
 .newPenalty {
     position: relative;
-    /* left: 200px; */
+    left: 200px;
     top: 30px;
     width: calc(100vh - 128px);
 }
@@ -638,34 +624,34 @@ a.card-link {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
-.modalBtn {
+.modalBtn{
     width: 40px;
     margin-right: 10px;
     border: none !important;
 }
 
 
-#ModalBtnY {
-    --bs-btn-bg: #DFF0D8 !important;
+#ModalBtnY{
+    --bs-btn-bg:#DFF0D8 !important;
     border: none !important;
     color: #6c757d;
 }
 
-#ModalBtnY:hover {
+#ModalBtnY:hover{
     background-color: #b4b4b4;
 }
 
-#ModalBtnN {
-    --bs-btn-bg: #F2DEDE;
+#ModalBtnN{
+    --bs-btn-bg:#F2DEDE;
     border: none !important;
     color: #6c757d;
 }
 
-#ModalBtnN:hover {
+#ModalBtnN:hover{
     background-color: #b4b4b4;
 }
 
-#downloadBtn {
+#downloadBtn{
     position: relative;
     top: 7px;
 }
@@ -675,8 +661,7 @@ a.card-link {
     .profilePic img {
         display: none;
     }
-
-    .responsive {
+    .responsive{
         display: none !important;
     }
 }
@@ -809,15 +794,12 @@ a.card-link {
         height: 6vh;
         font-size: 16px;
     }
-
-    .btnCrop {
+    .btnCrop{
         width: 120px !important;
     }
-
-    .col-12 {
+    .col-12{
         width: 120px !important;
     }
-
     .d-flex {
         display: none !important;
     }
@@ -832,11 +814,14 @@ a.card-link {
         padding-bottom: 20px;
     }
 
-    .hide-chart {
+    .hide-chart{
         display: none !important;
     }
 
-    .logIn_form{
-        margin-top: 120px;
-    }
+    .card {
+        margin-left: 50px !important;
+      }
 }
+
+
+

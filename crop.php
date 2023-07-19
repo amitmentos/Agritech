@@ -99,14 +99,14 @@
     <div class="main">
         <div class="side-menu">
             <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
-            <a href="#"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
+            <a href="penaltyList.php"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
             <a href="#"><i class="fa fa-user-o" aria-hidden="true"></i>Customers</a>
             <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a><br><a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></section>
         </div>
         <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="index.html?prodId=1">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Crop</li>
+              <li class="breadcrumb-item active" aria-current="page">Crop</li><br>
             </ol>
         </nav>
         <div class="upper-main row ">
@@ -190,14 +190,14 @@
           </section>
             <div class="dropdown">
               <?php if($_SESSION["user_type"]== "farmer") {echo '
-                <button id="modalBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#removeModal">
+                <button type="button" class="btn modalBtn btn-primary" data-bs-toggle="modal" data-bs-target="#removeModal">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </button>
-                <button id="modalBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">
+                <button type="button" class="btn modalBtn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
                 </button>';}
               ?>
-              <i class="fa fa-download" aria-hidden="true"></i>
+              <i id= "downloadBtn" class="fa fa-download" aria-hidden="true"></i>
               <button class="btn btn-secondary dropdown-toggle" type="button" id="timeRangeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 All Times
               </button>

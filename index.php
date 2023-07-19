@@ -9,7 +9,6 @@
 ?>
 <?php 
   session_start();
-
   if (!isset($_SESSION["user_id"]) || empty($_SESSION["user_id"])) {
     header("Location: login.php");
     exit; 
@@ -26,7 +25,12 @@
     $query = "SELECT * FROM tbl_229 WHERE user_id = '" . $_SESSION["user_id"] . "'";
   }
 	if ($cat != 'All') {
-		$query .= " ORDER by $cat";
+    if($cat == 'avg'){
+    $query .= " ORDER BY CAST($cat AS DECIMAL)";
+    }
+    else{
+      $query .= " ORDER by $cat";
+    }
 	}
 	$result = mysqli_query($connection, $query);
     if(!$result) {
@@ -94,7 +98,7 @@
     <div class="main">
         <div class="side-menu">
             <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
-            <a href="#"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
+            <a href="penaltyList.php"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
             <a href="#"><i class="fa fa-user-o" aria-hidden="true"></i>Customers</a>
             <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a><br><a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></section>
         </div>
@@ -108,13 +112,12 @@
             <tr>
               <th scope="col"></th>
               <th scope="col">Date <button class="sort-button" data-column="date"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
-              <th scope="col">Name <button class="sort-button" data-column="name"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+              <th scope="col">Name <button class="sort-button" data-column="plot_name"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
               <th class="responsive-cols" scope="col">AVG <button class="sort-button" data-column="avg"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
-              <th class="responsive-cols" scope="col">Level <button class="sort-button" data-column="avg"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+              <th class="responsive-cols" scope="col">Level <button class="sort-button" data-column="Level"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
               <th class="responsive-cols" scope="col">Crop Type<button class="sort-button" data-column="Crop_Type"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button> </th>
               <th scope="col">Summary</th>
               <th scope="col">
-                <button id="edit-button" class="btn btn-primary Edit">Edit</button>
               </th>
             </tr>
           </thead>
@@ -122,7 +125,7 @@
             <?php
             		while($row = mysqli_fetch_assoc($result)) {
                   echo '<tr class="' . $row['level']. '">';
-                  echo '<td>' . $row['plot_id'] . '</td>';
+                  echo '<td>&nbsp;     &nbsp;</td>';
                   echo '<td>' . $row['date'] . '</td>';
                   echo '<td>' . $row['plot_name'] . '</td>';
                   echo '<td class="responsive-cols">' . $row['AVG'] . '</td>';

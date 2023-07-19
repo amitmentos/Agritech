@@ -14,27 +14,49 @@ if (!isset($_SESSION["user_id"]) || empty($_SESSION["user_id"])) {
     header("Location: login.php");
     exit;
 }
-if (!empty($_SERVER['QUERY_STRING'])) {
-    $cat = $_GET['category'];
-} else {
-    $cat = 'All';
+if(!empty($_GET["paneltyAmount"])){
+    $panelty_amount = $_GET["paneltyAmount"];
+    $panelty_description = $_GET['newDescription'];
+    $panelty_id = $_GET['penaltyId'];
+    $query = "UPDATE tbl_229_penalty
+              SET summery = '$panelty_description', Amount = '$panelty_amount'
+              WHERE penalty_id = $panelty_id;";
+    
+    $result = mysqli_query($connection, $query);
+    if(!$result) {
+        die("DB query failed.");
+    }
 }
+if(!empty($_GET["selectYes"])){
+$panelty_id = $_GET['penaltyId'];
+$query = "DELETE FROM tbl_229_penalty
+            WHERE penalty_id = $panelty_id;";
+
+$result = mysqli_query($connection, $query);
+if(!$result) {
+    die("DB query failed.");
+}
+}
+
 if ($_SESSION["user_type"] == 'insp') {
     $query = "SELECT * 
     FROM tbl_229_penalty 
     INNER JOIN tbl_229_users 
-    ON tbl_229_penalty.farmer_id = tbl_229_users.ID;";
+    ON tbl_229_penalty.inspector_id = tbl_229_users.ID;";
 }
 if ($_SESSION["user_type"] == 'farmer') {
-    $query = "SELECT * FROM tbl_229_penalty WHERE user_id = '" . $_SESSION["user_id"] . "'";
+    $query = "SELECT * FROM tbl_229_penalty 
+    INNER JOIN tbl_229_users 
+    ON tbl_229_penalty.inspector_id = tbl_229_users.ID
+    HAVING farmer_id = '" . $_SESSION["user_id"] . "'";
 }
-if ($cat != 'All') {
-    $query .= " ORDER by $cat";
-}
+
 $result = mysqli_query($connection, $query);
 if (!$result) {
     die("DB query failed.");
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +79,7 @@ if (!$result) {
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Passions+Conflict&display=swap');
     </style>
-    <script defer="" src="js/scripts.js"></script>
+    <script defer="" src="js/scriptsPanelty.js"></script>
 
     <title>Agritech</title>
 </head>
@@ -68,12 +90,11 @@ if (!$result) {
             <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="logo picture" title="logo">
         </div>
         <div class="logo">
-            <a href="index.html" class="logo-link" title="logo"></a>
+            <a href="index.php" class="logo-link" title="logo"></a>
         </div>
         <div class="navigatin">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
-                    <!-- <a class="nav-link" href="#">Navbar</a> -->
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +103,7 @@ if (!$result) {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="#">Home</a>
+                                <a class="nav-link" aria-current="page" href="index.php">Home</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Violation</a>
@@ -103,6 +124,7 @@ if (!$result) {
 
     </header>
     <div class="main">
+
         <div class="side-menu">
             <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
             <a href="#"><i class="fa fa-folder-open" aria-hidden="true"></i>Open Cases</a>
@@ -115,22 +137,81 @@ if (!$result) {
             aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Open Cases</li>
             </ol>
         </nav>
+        <div class="editPenalty">
+            <div class="modal fade" id="removeModalPenalty" tabindex="-1" aria-labelledby="removeModalPenalty"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="removeModalPenalty">Remove Panelty</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="#" method="GET" id="frm">
+                                <div class="form-outline mb-4">
+                                    <label class="form-label">Are You Sure You Want To Delete This Panely?</label>
+                                </div>
+                                <input type="text" name="penaltyId" value="" hidden>
+                                <input type="text" name="selectYes" value="1" hidden>
+                                <div class="modal-footer">
+                                    <button type="button" id="ModalBtnN" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" id="ModalBtnY" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="editModalPenalty" tabindex="-1" aria-labelledby="editModalPenalty"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalPenalty">Edit Panelty</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="#" method="GET" id="frm">
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="plotName">Panelty Description:</label>
+                                    <textarea class="form-control" id="description" name="newDescription" placeholder="More details..." required></textarea>
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="plotSize">Panelty Amount:</label>
+                                    <input type="number" class="form-control" name="paneltyAmount" placeholder="size" required>
+                                </div>
+
+                                <input type="text" name="penaltyId" value="" hidden>
+                                <div class="modal-footer">
+                                    <button type="button" id="ModalBtnN" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" id="ModalBtnY" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+
+            </div>
+        </div>
         <div class="container">
             <?php
-            echo '<div class="row">';
             // Get the current date.
             $now = new DateTime();
 
             while ($row = mysqli_fetch_assoc($result)) {
-                // Convert PaymentDueDate from string to DateTime object.
                 $dueDate = new DateTime($row["PaymentDueDate"]);
-
-                // Get the difference in weeks.
                 $diff = $now->diff($dueDate)->days / 7;
 
-                // Determine the class of the card based on the difference.
                 $dateClass = "";
                 if ($diff < 2) {
                     $dateClass = "card-red";
@@ -141,10 +222,10 @@ if (!$result) {
                 }
 
                 echo '<div class="card" style="width: 18rem;">';
-                echo '<img src="' . $_SESSION['user_img'] . '" class="card-img-top" alt="User Image">';
-                echo '<div class="card-body">';
-                echo '<h5 class="card-title">' . $row["name"] . '</h5>'; // Farmer name as the card title
-                echo '<p class="card-text">' . $row["summery"] . '</p>'; // Summary as the card text
+                echo '<img src="' . $row['profile_url'] . '" class="card-img-top" alt="User Image">';
+                echo '<div class="card-body-up">';
+                echo '<h5 class="card-title">' . $row["name"] . ($_SESSION["user_type"] == "insp" ? '<button type="button" class="btn modalBtn2 labelEdit btn-primary" data-bs-toggle="modal" data-bs-target="#removeModalPenalty" data-penalty="' . $row['penalty_id'] . '"><i class="fa fa-trash-o" aria-hidden="true"></i></button><button type="button" class="btn modalBtn2 labelEdit btn-primary" data-bs-toggle="modal" data-bs-target="#editModalPenalty" data-penalty="' . $row['penalty_id'] . '"><i class="fa fa-pencil" aria-hidden="true"></i></button>' : '') . '</h5>';
+                echo '<p class="card-text">' . $row["summery"] . '</p>';
                 echo '</div>';
                 echo '<ul class="list-group list-group-flush">';
                 echo '<li class="list-group-item">Amount: <span>' . $row["Amount"] . '</span></li>';
@@ -156,16 +237,9 @@ if (!$result) {
                 echo '</div>';
                 echo '</div>';
             }
-
-
-
-            echo '</div>';
-            ?>
-            <?php
             mysqli_free_result($result);
             ?>
         </div>
-    </div>
 </body>
 
 </html>

@@ -151,8 +151,7 @@ if (!empty($_GET["cropId"])) {
             </div>
         </div>
     </div>
-
-    <div class="logo">
+    <div class="logoLogIn">
         <a href="login.php" class="logo-link" title="logo"></a>
     </div>
     <div class="logIn_form">

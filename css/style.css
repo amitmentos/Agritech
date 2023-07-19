@@ -202,7 +202,7 @@ a.card-link {
 
 .navigatin a {
     border-right: 1px solid #818181;
-    width: 90px;
+    width: 110px;
 }
 
 .container {
@@ -225,6 +225,20 @@ a.card-link {
     opacity: 1;
 }
 
+.logOutToggle{
+    display: none;
+    text-decoration: none;
+}
+.logOutToggle a{
+    text-decoration: none;
+    color: var(--bs-nav-link-color);
+    margin-left: 24px;
+}
+
+.selectedNav{
+    text-decoration: underline;
+}
+
 .container-fluid {
     background-color: transparent;
 }
@@ -240,6 +254,10 @@ a.card-link {
     text-align: center;
 }
 
+.nav-link:hover {
+    color: rgb(51, 51, 96);
+}
+
 .navigatin a:nth-child(3) {
     border-right: none;
 }
@@ -252,13 +270,12 @@ a.card-link {
     left: 0;
     overflow-x: hidden;
     padding-top: 20px;
-    height: 100vh;
-    /* border-right:1px solid #818181; */
+    height: calc(100vh + 30px);
     background-color: #F7F6F6;
 }
 
 .side-menu a:hover {
-    color: #f1f1f1;
+    color: rgb(51, 51, 96);
 }
 
 .side-menu a {
@@ -300,9 +317,6 @@ a.card-link {
     position: relative;
     display: flex;
     width: 100vw;
-    /* height: calc(100vh - 128px); */
-
-
 }
 
 .form-control {
@@ -332,12 +346,13 @@ a.card-link {
 }
 
 
-
+#colName, #colAvg{
+    width: 100px;
+}
 .table {
     position: relative;
     height: 100vh;
     top: 30px;
-    /* left: 195px; */
     width: 85%;
 }
 
@@ -356,7 +371,12 @@ a.card-link {
 
 }
 
-
+.sort-button:hover{
+    background-color: #b4b4b4;
+}
+#downloadBtn:hover{
+    background-color: #b4b4b4;
+}
 
 .table td,
 .table th {
@@ -367,17 +387,14 @@ a.card-link {
 
 .table tbody tr.Low td:first-child {
     background-color: #DFF0D8;
-    /* Green for "Low" level */
 }
 
 .table tbody tr.Medium td:first-child {
     background-color: #F3EDD2;
-    /* Yellow for "Medium" level */
 }
 
 .table tbody tr.High td:first-child {
     background-color: #F2DEDE;
-    /* Red for "High" level */
 }
 
 .table thead th:nth-child(8) {
@@ -396,15 +413,11 @@ a.card-link {
     cursor: pointer;
 }
 
-
-
-
 .upper-main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    /* margin-left: 195px; */
     height: 150px;
     width: calc(100vw - 195px);
     border-bottom: 1px solid #818181;
@@ -526,24 +539,32 @@ a.card-link {
 
 .newPenalty {
     position: relative;
-    /* left: 200px; */
     top: 30px;
     width: calc(100vh - 128px);
+    height: 600px;
 }
 
 .newPenaltyH2 {
     position: absolute;
+
     width: 600px;
     left: 2%;
     top: 0px;
-
     font-style: normal;
     font-weight: 600;
     font-size: 32px;
+    display: flex;
+    text-overflow: ellipsis;
+    flex-wrap: wrap;
+}
+
+.newPlotP{
+    display: flex;
+    text-overflow: ellipsis;
+    flex-wrap: wrap;
 }
 
 .newPenaltyH2 p {
-
     font-weight: 400;
     font-size: 18px;
     line-height: 80%;
@@ -558,6 +579,9 @@ a.card-link {
     top: 15%;
 }
 
+#inputAmount{
+    width: 82px;
+}
 
 .form-control {
     background: #FFFFFF;
@@ -667,15 +691,15 @@ a.card-link {
 
 #downloadBtn {
     position: relative;
-    top: 7px;
+    top:1px
 }
-
-
-@media screen and (max-width:1115px) {
+@media screen and (max-width:1165px) {
     .profilePic img {
         display: none;
     }
+}
 
+@media screen and (max-width:1115px) {
     .responsive {
         display: none !important;
     }
@@ -805,9 +829,8 @@ a.card-link {
     }
 
     .upper-main a {
-
         height: 6vh;
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .btnCrop {
@@ -816,10 +839,19 @@ a.card-link {
 
     .col-12 {
         width: 120px !important;
-    }
 
+    }
     .d-flex {
         display: none !important;
+    }
+    .logOutToggle{
+        display: block;
+    }
+    .logIn_form{
+        margin-top: 120px;
+    }
+    .logoLogIn{
+        top: 0;
     }
 }
 
@@ -839,4 +871,15 @@ a.card-link {
     .logIn_form{
         margin-top: 120px;
     }
+
+    .newPenaltyH2 p {
+        margin-right: 300px;
+    }
+    .newPenalty form {
+        margin-top: 10px;
+    }
+    .newPenalty{
+        top: 0;
+    }
+
 }

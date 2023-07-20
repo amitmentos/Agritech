@@ -165,7 +165,7 @@ if (!$result) {
           <th scope="col"></th>
           <th scope="col">Date <button class="sort-button btn" data-column="date"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
           <th scope="col" id="colName">Name <button class="sort-button btn" data-column="plot_name"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
-          <th class="responsive-cols" scope="col" id="colAvg">AVG <button class="sort-button btn" data-column="avg"><i class="fa fa-sort-amount-asc " aria-hidden="true"></i></button></th>
+          <th class="responsive-cols" scope="col" id="colAvg">AVG <button class="sort-button btn" data-column="avg" title="This column represents the percentage of water consumption in relation to plots with similar characteristics"><i class="fa fa-sort-amount-asc " aria-hidden="true"></i></button></th>
           <th class="responsive-cols" scope="col" id="colLevel">Level <button class="sort-button btn" data-column="Level"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
           <th class="responsive-cols" scope="col" id="colType">Crop Type<button class="sort-button btn" data-column="Crop_Type"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button> </th>
           <th scope="col">Summary</th>

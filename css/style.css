@@ -38,7 +38,6 @@ header {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: auto;
-    /* to center within flex container */
 }
 
 .error-message {
@@ -48,6 +47,10 @@ header {
 }
 
 /*--------------------------------------*/
+.card{
+    border: none;
+    box-shadow:0 5px 20px rgba(0, 0, 0, 0.05);
+}
 .card-img-top{
     width: 100%;
     height: 270px;
@@ -57,9 +60,7 @@ header {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    /* height: 130px; */
     overflow: hidden;
-    /* white-space: nowrap; */
 }
 .card a {
     background-color: none;
@@ -124,15 +125,11 @@ a.card-link {
 
 .modalBtn2 {
     width: 40px;
-    margin-right: 10px;
+    margin-right: 2px;
     border: none !important;
     color: #000000;
     font-size: 22px;
 }
-
-/* #labelEdit{
-    margin-left: 60px;
-} */
 
 /*--------------------------------------- */
 .wrapper {
@@ -158,6 +155,18 @@ a.card-link {
     background-position: center;
     background-repeat: no-repeat;
     top: 10%;
+}
+
+#userNameToShow{
+    position: absolute;
+    top: 280px;
+    left: 30px;
+    border-top: 1px solid #818181;
+    color: #818181;
+}
+
+#userNameToShowSmall{
+    display: none;
 }
 
 .profilePic {
@@ -212,7 +221,6 @@ a.card-link {
     margin-top: 40px;
     display: flex;
     justify-content: center;
-    /* justify-content: space-between; */
     align-items: flex-start;
     flex-direction: row;
     padding: 0;
@@ -250,7 +258,6 @@ a.card-link {
     position: relative;
     left: 20px;
     width: 500px;
-
 }
 
 .nav-link {
@@ -317,9 +324,7 @@ a.card-link {
 }
 
 
-
-
-.main {
+main {
     position: relative;
     display: flex;
     width: 100vw;
@@ -341,7 +346,6 @@ a.card-link {
     width: 200px;
 }
 
-
 .profilePic img {
     width: 80px;
     height: 80px;
@@ -350,7 +354,6 @@ a.card-link {
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
 }
-
 
 #colName, #colAvg, #colLevel, #colType{
     width: 100px;
@@ -447,6 +450,31 @@ a.card-link {
 
 .upper-main a:hover {
     background-color: #b4b4b4 !important;
+}
+
+#dataUpdatedP, #penaltyUpdatedP, #dataRemoveP{
+    display: none;
+}
+
+#dataRemoveP.data-updated-show {
+    display: block;
+    position: absolute;
+    margin-left: 40vw;
+    color: #22aa22;
+  }
+
+#dataUpdatedP.data-updated-show {
+    display: block;
+    position: absolute;
+    left: 35vh;
+    color: #22aa22;
+  }
+
+#penaltyUpdatedP.data-updated-show {
+    display: block;
+    position: absolute;
+    left: 50vw;
+    color: #22aa22;
 }
 
 .my-chart {
@@ -546,7 +574,6 @@ a.card-link {
 
 }
 
-
 .newPenalty {
     position: relative;
     top: 30px;
@@ -556,7 +583,6 @@ a.card-link {
 
 .newPenaltyH2 {
     position: absolute;
-
     width: 600px;
     left: 2%;
     top: 0px;
@@ -628,7 +654,6 @@ a.card-link {
 #BACK {
     width: 211px;
     height: 38px;
-
     color: #F2DEDE;
 }
 
@@ -645,7 +670,6 @@ a.card-link {
 
 
 .custom-file-input::-webkit-file-upload-button {
-    /* visibility: hidden; */
     display: none;
 }
 
@@ -863,6 +887,14 @@ a.card-link {
     .logoLogIn{
         top: 0;
     }
+    #userNameToShowSmall{
+        display: inline;
+        position: absolute;
+        left: 74px;
+        font-size: 12px;
+        top: 35px;
+        color: #818181;
+    }
 }
 
 
@@ -892,4 +924,14 @@ a.card-link {
         top: 0;
     }
 
+    #dataUpdatedP.data-updated-show {
+        position: relative;
+        left: 0;
+      }
+      #dataRemoveP.data-updated-show {
+        margin-left: 25vw;
+      }
+      #penaltyUpdatedP.data-updated-show {
+        left: 20vw;
+    }
 }

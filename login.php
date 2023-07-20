@@ -18,8 +18,9 @@ if (!empty($_POST["loginMail"])) {
         $_SESSION["user_id"] = $row['ID'];
         $_SESSION["user_type"] = $row['user_type'];
         $_SESSION["user_img"] = $row['profile_url'];
+        $_SESSION["user_name"] = $row['name'];
         $_SESSION["login"] = true;
-        header('Location: ' . URL . 'index.php');
+        header('Location: index.php');
     } else {
         $message = 'invail username or password';
     }
@@ -32,7 +33,6 @@ if (!empty($_POST["userEmail"])) {
     $user_password = $_POST["userPassword"];
     $user_type = $_POST["userType"];
     echo $user_email;
-    // Check if file was uploaded
     if (isset($_FILES['userImage'])) {
         $errors = array();
         $file_name = $_FILES['userImage']['name'];
@@ -40,7 +40,6 @@ if (!empty($_POST["userEmail"])) {
         $file_tmp = $_FILES['userImage']['tmp_name'];
         $file_type = $_FILES['userImage']['type'];
 
-        // $file_ext = strtolower(end(explode('.', $_FILES['userImage']['name'])));
         $file_parts = explode('.', $_FILES['userImage']['name']);
         $file_ext = strtolower(end($file_parts));
         $extensions = array("jpeg", "jpg", "png","");
@@ -64,10 +63,10 @@ if (!empty($_POST["userEmail"])) {
             print_r($errors);
         }
     }
-    // Check if the email already exists in the database
     $query = "SELECT * FROM tbl_229_users WHERE email = '$user_email'";
     $result = mysqli_query($connection, $query);
     if (!$result) {
+        header("Location: login.php");
         die("DB query failed.");
     }
     if (mysqli_num_rows($result) > 0) {
@@ -79,6 +78,7 @@ if (!empty($_POST["userEmail"])) {
 
         $result = mysqli_query($connection, $query);
         if (!$result) {
+            header("Location: login.php");
             die("DB query failed.");
         }
         header("Location: index.php");
@@ -167,11 +167,9 @@ if (!empty($_GET["cropId"])) {
     <div class="logIn_form">
         <h1 class="mb-4">Login</h1>
         <form action="#" method="post" id="frm">
-            <!-- Email input -->
             <div class="form-outline mb-4">
             <label class="form-label" >Email address: <span id="emailError" style="display: <?php echo isset($error_message) ? 'block' : 'none'; ?>;"><?php echo isset($error_message) ? $error_message : ''; ?></span></label>                <input type="email" class="form-control" name="loginMail" id="loginMail" placeholder="email" required>
             </div>
-            <!-- Password input -->
             <div class="form-outline mb-4">
                 <label class="form-label" >Password:</label>
                 <input type="password" class="form-control" name="loginPass" id="loginPass" placeholder="password"
@@ -180,7 +178,6 @@ if (!empty($_GET["cropId"])) {
 
             <button type="submit" id="loginBtn1" class="btn btn-primary btn-block mb-4">Sign in</button>
 
-            <!-- Register buttons -->
             <div class="text-center">
                 <p>Not a member? <a href="#" data-bs-toggle="modal" data-bs-target="#removeModal">Register</a></p>
             </div>

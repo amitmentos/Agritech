@@ -3,17 +3,26 @@ include "config.php";
 $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
 if (mysqli_connect_errno()) {
+  header("Location: login.php");
   die("DB connection failed: " . mysqli_connect_error() . " (" . mysqli_connect_errno() . ")");
 }
 ?>
 <?php
 session_start();
+
 if (!isset($_SESSION["user_id"]) || empty($_SESSION["user_id"])) {
   header("Location: login.php");
   exit;
 }
+if (isset($_SESSION['success']) && $_SESSION['success'] == 2) {
+  $dataUpdatedClass = 'data-updated-show';
+} else {
+  $dataUpdatedClass = 'data-updated-hide';
+}
+
 if (!empty($_GET["newUserName"])) {
   $new_userName = $_GET['newUserName'];
+  $_SESSION["user_name"] = $_GET['newUserName'];
   $new_password = $_GET['newPassword'];
   $user_id = intval($_SESSION["user_id"]);
   $query = "UPDATE tbl_229_users
@@ -22,15 +31,16 @@ if (!empty($_GET["newUserName"])) {
 
   $result = mysqli_query($connection, $query);
   if (!$result) {
+    header("Location: login.php");
     die("DB query failed.");
   }
 }
 
 $farmer_id_penalty = $_SESSION["user_id"];
-// Query to count penalties for the specific farmer_id
 $sql = "SELECT COUNT(*) AS penaltyCount FROM tbl_229_penalty WHERE farmer_id = $farmer_id_penalty";
 $result = mysqli_query($connection, $sql);
 if (!$result) {
+  header("Location: login.php");
   die("DB query failed.");
 }
 
@@ -61,6 +71,7 @@ if ($cat != 'All') {
 }
 $result = mysqli_query($connection, $query);
 if (!$result) {
+  header("Location: login.php");
   die("DB query failed.");
 }
 ?>
@@ -86,8 +97,9 @@ if (!$result) {
 </head>
 <body class="wrapper">
   <header>
+    <label id="userNameToShowSmall">  &nbsp; &nbsp;Hi, <?php echo $_SESSION["user_name"]; ?></label>
     <div class="profilePic">
-      <a href="#" id="editProfilePic">
+    <a href="#" id="editProfilePic">
         <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="profile picture" title="profile picture">
       </a>
     </div>
@@ -133,18 +145,20 @@ if (!$result) {
     </div>
 
   </header>
-  <div class="main">
+  <main class="main">
     <div class="side-menu">
       <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
       <a href="#"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Articles</a>
       <a href="#"><i class="fa fa-user-o" aria-hidden="true"></i>Profile</a>
       <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a><br><a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></section>
+      <label id="userNameToShow">Hi, <?php echo $_SESSION["user_name"]; ?></label>
     </div>
     <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#">Home</a></li>
       </ol>
     </nav>
+    <section id="dataRemoveP" class="<?php echo $dataUpdatedClass; ?>">Data removed successfully!!</section>
     <table class="table" id="myTable">
       <thead>
         <tr>
@@ -193,7 +207,7 @@ if (!$result) {
 
                   <div class="form-outline mb-4">
                     <label class="form-label" >Password:</label>
-                    <input type="text" class="form-control" name="newPassword" placeholder="password" required>
+                    <input type="password" class="form-control" name="newPassword" placeholder="password" required>
                   </div>
                   <div class="modal-footer">
                     <button type="button" id="ModalBtnN" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -204,6 +218,7 @@ if (!$result) {
             </div>
           </div>
         </div>
-  </div>
+        <?php $_SESSION['success'] =0; ?>
+      </main>
 </body>
 </html>

@@ -1,13 +1,13 @@
 
-var timeRangeDropdown = document.getElementById('timeRangeDropdown');
-    var dropdownItems = document.querySelectorAll(".dropdown-item");
-    var myChart;
-    var myChart2;
+let timeRangeDropdown = document.getElementById('timeRangeDropdown');
+    let dropdownItems = document.querySelectorAll(".dropdown-item");
+    let myChart;
+    let myChart2;
 
     dropdownItems.forEach(function(item) {
       item.addEventListener("click", function() {
-        var selectedText = this.textContent;
-        var selectedTimeRange = this.getAttribute("data-time-range");
+        let selectedText = this.textContent;
+        let selectedTimeRange = this.getAttribute("data-time-range");
         timeRangeDropdown.textContent = selectedText;
         updateCharts(selectedTimeRange);
       });
@@ -15,7 +15,7 @@ var timeRangeDropdown = document.getElementById('timeRangeDropdown');
 
     function updateCharts(timeRange) {
       // Fetch data from JSON file based on the selected time range
-      var dataURL = 'chartData.json';
+      let dataURL = 'chartData.json';
 
       // Fetch data for both charts
       fetch(dataURL)
@@ -35,8 +35,8 @@ var timeRangeDropdown = document.getElementById('timeRangeDropdown');
         });
     }
 
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var data = {
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let data = {
       labels: ['2017', '2018', '2019', '2020', '2021', '2022', '2023'],
       datasets: [
         {
@@ -56,7 +56,7 @@ var timeRangeDropdown = document.getElementById('timeRangeDropdown');
       ]
     };
 
-    var options = {
+    let options = {
       responsive: true,
       scales: {
         y: {
@@ -71,8 +71,8 @@ var timeRangeDropdown = document.getElementById('timeRangeDropdown');
       options: options
     });
 
-    var ctr = document.getElementById("myChart2").getContext('2d');
-    var data2 = {
+    let ctr = document.getElementById("myChart2").getContext('2d');
+    let data2 = {
       labels: ["2017", "2018", "2019", "2020", "2021", "2022", "2023"],
       datasets: [
         {
@@ -100,7 +100,7 @@ var timeRangeDropdown = document.getElementById('timeRangeDropdown');
       ]
     };
 
-    var options2 = {
+    let options2 = {
       responsive: true,
       scales: {
         y: {

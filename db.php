@@ -3,6 +3,4 @@
 	$dbuser = "dbusrShnkr23";
 	$dbpass = "studDBpwWeb2!";
 	$dbname = "dbShnkr23stud2";
-
-    define("URL", "http://localhost/")
 ?>

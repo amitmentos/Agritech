@@ -3,6 +3,7 @@ include "config.php";
 $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
 if (mysqli_connect_errno()) {
+  header("Location: login.php");
   die("DB connection failed: " . mysqli_connect_error() . " (" . mysqli_connect_errno() . ")");
 }
 ?>
@@ -11,8 +12,10 @@ session_start();
 if (empty($_GET["cropId"])) {
   header("Location: index.php");
 }
+$_SESSION['success'] =0;
 if (!empty($_GET["newUserName"])) {
   $new_userName = $_GET['newUserName'];
+  $_SESSION["user_name"] = $_GET['newUserName'];
   $new_password = $_GET['newPassword'];
   $user_id = intval($_SESSION["user_id"]);
   $query = "UPDATE tbl_229_users
@@ -21,8 +24,10 @@ if (!empty($_GET["newUserName"])) {
 
   $result = mysqli_query($connection, $query);
   if (!$result) {
+    header("Location: login.php");
     die("DB query failed.");
   }
+
 }
 if (!empty($_GET["plotName"])) {
   $plot_name = $_GET['plotName'];
@@ -34,8 +39,10 @@ if (!empty($_GET["plotName"])) {
 
   $result = mysqli_query($connection, $query);
   if (!$result) {
+    header("Location: login.php");
     die("DB query failed.");
   }
+  $_SESSION['success'] =1;
 }
 if (!empty($_GET["selectYes"])) {
   $plot_id = $_GET['cropId'];
@@ -44,15 +51,17 @@ if (!empty($_GET["selectYes"])) {
 
   $result = mysqli_query($connection, $query);
   if (!$result) {
+    header("Location: login.php");
     die("DB query failed.");
   }
+  $_SESSION['success'] =2;
   header("Location: index.php");
 }
 $farmer_id_penalty = $_SESSION["user_id"];
-// Query to count penalties for the specific farmer_id
 $sql = "SELECT COUNT(*) AS penaltyCount FROM tbl_229_penalty WHERE farmer_id = $farmer_id_penalty";
 $result = mysqli_query($connection, $sql);
 if (!$result) {
+  header("Location: login.php");
   die("DB query failed.");
 }
 if ($result) {
@@ -67,7 +76,11 @@ if (!empty($_GET["cropId"])) {
   $result = mysqli_query($connection, $query);
   $row = mysqli_fetch_assoc($result);
 }
-
+if (isset($_SESSION['success']) && $_SESSION['success'] == 1) {
+  $dataUpdatedClass = 'data-updated-show';
+} else {
+  $dataUpdatedClass = 'data-updated-hide';
+}
 ?>
 
 <!DOCTYPE html>
@@ -92,6 +105,7 @@ if (!empty($_GET["cropId"])) {
 
 <body class="wrapper">
   <header>
+    <label id="userNameToShowSmall">  &nbsp; &nbsp;Hi, <?php echo $_SESSION["user_name"]; ?></label>
     <div class="logo">
       <a href="index.php" class="logo-link" title="logo"></a>
     </div>
@@ -108,18 +122,19 @@ if (!empty($_GET["cropId"])) {
               </li>
               <li class="nav-item">
                 <?php if ($_SESSION["user_type"] == "farmer") {
-                      echo '<a class="nav-link" aria-current="page" href="newPlot.php">New Plot</a>';
-                    }
-                    else{
-                      echo '<a class="nav-link" aria-current="page" href="#">History</a>';
-                    }
+                  echo '<a class="nav-link" aria-current="page" href="newPlot.php">New Plot</a>';
+                } else {
+                  echo '<a class="nav-link" aria-current="page" href="#">History</a>';
+                }
                 ?>
               </li>
               <li class="nav-item">
-              <a class="nav-link" href="penaltyList.php">Penalties<?php if ($_SESSION["user_type"] == "farmer"){    echo '<span class="penaltySum">(<span class="penaltySum" id="penalySumNum">' . $penaltyCount . '</span>)</span>';} ?></a>
+                <a class="nav-link" href="penaltyList.php">Penalties<?php if ($_SESSION["user_type"] == "farmer") {
+                                                                      echo '<span class="penaltySum">(<span class="penaltySum" id="penalySumNum">' . $penaltyCount . '</span>)</span>';
+                                                                    } ?></a>
               </li>
               <li class="nav-item logOutToggle">
-                  <a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
+                <a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
               </li>
             </ul>
             <form class="d-flex" role="search">
@@ -136,12 +151,13 @@ if (!empty($_GET["cropId"])) {
       </a>
     </div>
   </header>
-  <div class="main">
+  <main>
     <div class="side-menu">
       <a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Messages</a>
       <a href="#"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Articles</a>
       <a href="#"><i class="fa fa-user-o" aria-hidden="true"></i>Profile</a>
       <section class="userTool"><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Contact us</a><br><a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a><br><a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></section>
+      <label id="userNameToShow">Hi, <?php echo $_SESSION["user_name"]; ?></label>
     </div>
     <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -186,12 +202,12 @@ if (!empty($_GET["cropId"])) {
                 <form action="#" method="GET" id="frm">
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" >Plot Name:</label>
+                    <label class="form-label">Plot Name:</label>
                     <input type="text" class="form-control" name="plotName" placeholder="name" required>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" >Plot Size:</label>
+                    <label class="form-label">Plot Size:</label>
                     <input type="number" class="form-control" name="plotSize" placeholder="size" min=1 required>
                   </div>
 
@@ -214,9 +230,9 @@ if (!empty($_GET["cropId"])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <form  method="GET" id="frm">
+                <form method="GET" id="frm">
                   <div class="form-outline mb-4">
-                    <label class="form-label" >Are You Sure You Want To Delete This Plot?</label>
+                    <label class="form-label">Are You Sure You Want To Delete This Plot?</label>
                   </div>
                   <input type="text" name="cropId" <?php echo 'value="' . $row["plot_id"] . '"'; ?> hidden>
                   <input type="text" name="selectYes" value="1" hidden>
@@ -241,13 +257,13 @@ if (!empty($_GET["cropId"])) {
                 <form action="#" method="GET" id="frm">
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" >User Name:</label>
+                    <label class="form-label">User Name:</label>
                     <input type="text" class="form-control" name="newUserName" placeholder="name" required>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" >Password:</label>
-                    <input type="text" class="form-control" name="newPassword" placeholder="password" required>
+                    <label class="form-label">Password:</label>
+                    <input type="password" class="form-control" name="newPassword" placeholder="password" required>
                   </div>
                   <input type="text" name="cropId" <?php echo 'value="' . $row["plot_id"] . '"'; ?> hidden>
                   <div class="modal-footer">
@@ -260,6 +276,7 @@ if (!empty($_GET["cropId"])) {
           </div>
         </div>
       </section>
+      <section id="dataUpdatedP" class="<?php echo $dataUpdatedClass; ?>">Data updated successfully!!</section>
       <div class="dropdown">
         <?php if ($_SESSION["user_type"] == "farmer") {
           echo '
@@ -283,6 +300,7 @@ if (!empty($_GET["cropId"])) {
       </div>
       <canvas id="myChart" class="hide-chart"></canvas>
       <canvas id="myChart2" class="hide-chart2"></canvas>
-  </div>
+  </main>
 </body>
+
 </html>

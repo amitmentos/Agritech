@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     $('.modalBtn2').on('click', function() {
-        var penaltyId = $(this).data('penalty');
-        var modalTarget = $(this).data('bs-target');
+        let penaltyId = $(this).data('penalty');
+        let modalTarget = $(this).data('bs-target');
         
         if (modalTarget === '#removeModalPenalty') {
             $('#removeModalPenalty input[name="penaltyId"]').val(penaltyId);

@@ -13,6 +13,19 @@ if (!isset($_SESSION["user_id"]) || empty($_SESSION["user_id"])) {
     header("Location: login.php");
     exit;
 }
+if (!empty($_GET["newUserName"])) {
+    $new_userName = $_GET['newUserName'];
+    $new_password = $_GET['newPassword'];
+    $user_id = intval($_SESSION["user_id"]);
+    $query = "UPDATE tbl_229_users
+                SET name = '$new_userName', password = '$new_password'
+                WHERE ID = $user_id;";
+  
+    $result = mysqli_query($connection, $query);
+    if (!$result) {
+      die("DB query failed.");
+    }
+}
 if (!empty($_GET["paneltyAmount"])) {
     $panelty_amount = $_GET["paneltyAmount"];
     $panelty_description = $_GET['newDescription'];
@@ -36,18 +49,30 @@ if (!empty($_GET["selectYes"])) {
         die("DB query failed.");
     }
 }
-
+$farmer_id_penalty = $_SESSION["user_id"];
+// Query to count penalties for the specific farmer_id
+$sql = "SELECT COUNT(*) AS penaltyCount FROM tbl_229_penalty WHERE farmer_id = $farmer_id_penalty";
+$result = mysqli_query($connection, $sql);
+if (!$result) {
+  die("DB query failed.");
+}
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $penaltyCount = $row["penaltyCount"];
+} else {
+    $penaltyCount = 0;
+}
 if ($_SESSION["user_type"] == 'insp') {
     $query = "SELECT * 
     FROM tbl_229_penalty 
     INNER JOIN tbl_229_users 
-    ON tbl_229_penalty.inspector_id = tbl_229_users.ID;";
+    ON tbl_229_penalty.inspector_id = tbl_229_users.ID ORDER BY amount;";
 }
 if ($_SESSION["user_type"] == 'farmer') {
     $query = "SELECT * FROM tbl_229_penalty 
     INNER JOIN tbl_229_users 
     ON tbl_229_penalty.inspector_id = tbl_229_users.ID
-    HAVING farmer_id = '" . $_SESSION["user_id"] . "'";
+    WHERE farmer_id = '" . $_SESSION["user_id"] . "' ORDER BY amount";
 }
 
 $result = mysqli_query($connection, $query);
@@ -81,7 +106,9 @@ if (!$result) {
 <body class="wrapper">
     <header>
         <div class="profilePic">
-            <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="profile picture" title="profile picture">
+            <a href="#" id="editProfilePic">
+                <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="profile picture" title="profile picture">
+            </a>
         </div>
         <div class="logo">
             <a href="index.php" class="logo-link" title="logo"></a>
@@ -98,10 +125,16 @@ if (!$result) {
                                 <a class="nav-link" aria-current="page" href="index.php">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="#">History</a>
+                            <?php if ($_SESSION["user_type"] == "farmer") {
+                                echo '<a class="nav-link" aria-current="page" href="newPlot.php">New Plot</a>';
+                                }
+                                else{
+                                echo '<a class="nav-link" aria-current="page" href="#">History</a>';
+                                }
+                            ?>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link selectedNav" href="#">Penalties</a>
+                            <a class="nav-link" href="penaltyList.php">Penalties<?php if ($_SESSION["user_type"] == "farmer"){    echo '<span class="penaltySum">(<span class="penaltySum" id="penalySumNum">' . $penaltyCount . '</span>)</span>';} ?></a>
                             </li>
                             <li class="nav-item logOutToggle">
                                 <a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
@@ -167,13 +200,13 @@ if (!$result) {
                             <form action="#" method="GET" id="frm">
 
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="plotName">Panelty Description:</label>
+                                    <label class="form-label" >Panelty Description:</label>
                                     <textarea class="form-control" id="description" name="newDescription" placeholder="More details..." required></textarea>
                                 </div>
 
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="plotSize">Panelty Amount:</label>
-                                    <input type="number" class="form-control" name="paneltyAmount" placeholder="size" min=1 required>
+                                    <label class="form-label" >Panelty Amount:</label>
+                                    <input type="number" class="form-control" name="paneltyAmount" placeholder="$" min=1 required>
                                 </div>
 
                                 <input type="text" name="penaltyId" value="" hidden>
@@ -186,7 +219,36 @@ if (!$result) {
                     </div>
                 </div>
             </div>
-            <div>
+
+            <div class="modal fade" id="editModalProfile" tabindex="-1" aria-labelledby="editModalProfile" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalProfile">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" method="GET" id="frm">
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" >User Name:</label>
+                        <input type="text" class="form-control" name="newUserName" placeholder="name" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" >Password:</label>
+                        <input type="text" class="form-control" name="newPassword" placeholder="password" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="ModalBtnN" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="ModalBtnY" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            </div>
+        <div>
 
             </div>
         </div>
@@ -209,7 +271,7 @@ if (!$result) {
                 }
 
                 echo '<div class="card" style="width: 18rem;">';
-                echo '<img src="' . $row['profile_url'] . '" class="card-img-top" alt="User Image">';
+                echo '<img src="' . $row['profile_url'] . '" class="card-img-top" alt="Inspector Image" title="Inspector Image">';
                 echo '<div class="card-body-up">';
                 echo '<h5 class="card-title">' . $row["name"] . ($_SESSION["user_type"] == "insp" ? '<button type="button" class="btn modalBtn2 labelEdit btn-primary" data-bs-toggle="modal" data-bs-target="#removeModalPenalty" data-penalty="' . $row['penalty_id'] . '"><i class="fa fa-trash-o" aria-hidden="true"></i></button><button type="button" class="btn modalBtn2 labelEdit btn-primary" data-bs-toggle="modal" data-bs-target="#editModalPenalty" data-penalty="' . $row['penalty_id'] . '"><i class="fa fa-pencil" aria-hidden="true"></i></button>' : '') . '</h5>';
                 echo '<p class="card-text">' . $row["summery"] . '</p>';
@@ -226,7 +288,7 @@ if (!$result) {
             }
             mysqli_free_result($result);
             ?>
-        </div>
+    </div>
 </body>
 
 </html>

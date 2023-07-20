@@ -12,7 +12,36 @@ if (!isset($_SESSION["user_id"]) || empty($_SESSION["user_id"])) {
   header("Location: login.php");
   exit;
 }
-if (!empty($_SERVER['QUERY_STRING'])) {
+if (!empty($_GET["newUserName"])) {
+  $new_userName = $_GET['newUserName'];
+  $new_password = $_GET['newPassword'];
+  $user_id = intval($_SESSION["user_id"]);
+  $query = "UPDATE tbl_229_users
+              SET name = '$new_userName', password = '$new_password'
+              WHERE ID = $user_id;";
+
+  $result = mysqli_query($connection, $query);
+  if (!$result) {
+    die("DB query failed.");
+  }
+}
+
+$farmer_id_penalty = $_SESSION["user_id"];
+// Query to count penalties for the specific farmer_id
+$sql = "SELECT COUNT(*) AS penaltyCount FROM tbl_229_penalty WHERE farmer_id = $farmer_id_penalty";
+$result = mysqli_query($connection, $sql);
+if (!$result) {
+  die("DB query failed.");
+}
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $penaltyCount = $row["penaltyCount"];
+} else {
+    $penaltyCount = 0;
+}
+
+if (!empty($_GET['category'])) {
   $cat = $_GET['category'];
 } else {
   $cat = 'All';
@@ -55,11 +84,12 @@ if (!$result) {
 
   <title>Agritech</title>
 </head>
-
 <body class="wrapper">
   <header>
     <div class="profilePic">
-      <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="profile picture" title="profile picture">
+      <a href="#" id="editProfilePic">
+        <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="profile picture" title="profile picture">
+      </a>
     </div>
     <div class="logo">
       <a href="index.php" class="logo-link" title="logo"></a>
@@ -77,10 +107,16 @@ if (!$result) {
                 <a class="nav-link selectedNav" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">History</a>
+                <?php if ($_SESSION["user_type"] == "farmer") {
+                      echo '<a class="nav-link" aria-current="page" href="newPlot.php">New Plot</a>';
+                    }
+                    else{
+                      echo '<a class="nav-link" aria-current="page" href="#">History</a>';
+                    }
+                ?>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="penaltyList.php">Penalties</a>
+                <a class="nav-link" href="penaltyList.php">Penalties<?php if ($_SESSION["user_type"] == "farmer"){    echo '<span class="penaltySum">(<span class="penaltySum" id="penalySumNum">' . $penaltyCount . '</span>)</span>';} ?></a>
               </li>
               <li class="nav-item logOutToggle">
                   <a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
@@ -116,8 +152,8 @@ if (!$result) {
           <th scope="col">Date <button class="sort-button btn" data-column="date"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
           <th scope="col" id="colName">Name <button class="sort-button btn" data-column="plot_name"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
           <th class="responsive-cols" scope="col" id="colAvg">AVG <button class="sort-button btn" data-column="avg"><i class="fa fa-sort-amount-asc " aria-hidden="true"></i></button></th>
-          <th class="responsive-cols" scope="col">Level <button class="sort-button btn" data-column="Level"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
-          <th class="responsive-cols" scope="col">Crop Type<button class="sort-button btn" data-column="Crop_Type"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button> </th>
+          <th class="responsive-cols" scope="col" id="colLevel">Level <button class="sort-button btn" data-column="Level"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button></th>
+          <th class="responsive-cols" scope="col" id="colType">Crop Type<button class="sort-button btn" data-column="Crop_Type"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></button> </th>
           <th scope="col">Summary</th>
           <th scope="col">
           </th>
@@ -140,7 +176,34 @@ if (!$result) {
         ?>
       </tbody>
     </table>
+    <div class="modal fade" id="editModalProfile" tabindex="-1" aria-labelledby="editModalProfile" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editModalProfile">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="#" method="GET" id="frm">
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" >User Name:</label>
+                    <input type="text" class="form-control" name="newUserName" placeholder="name" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" >Password:</label>
+                    <input type="text" class="form-control" name="newPassword" placeholder="password" required>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="ModalBtnN" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="ModalBtnY" class="btn btn-primary">Save changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
   </div>
 </body>
-
 </html>

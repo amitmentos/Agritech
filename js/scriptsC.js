@@ -1,3 +1,4 @@
+
 var timeRangeDropdown = document.getElementById('timeRangeDropdown');
     var dropdownItems = document.querySelectorAll(".dropdown-item");
     var myChart;
@@ -113,3 +114,10 @@ var timeRangeDropdown = document.getElementById('timeRangeDropdown');
       data: data2,
       options: options2
     });
+
+    $(document).ready(function() {
+      $('#editProfilePic').on('click', function(event) {
+      event.preventDefault(); // Prevent the link's default action
+      $('#editModalProfile').modal('show'); // Show the modal with the specified ID
+      });
+  });

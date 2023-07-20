@@ -7,7 +7,10 @@ $(document).ready(function() {
     });
   
 
-
+    $('#editProfilePic').on('click', function(event) {
+      event.preventDefault(); // Prevent the link's default action
+      $('#editModalProfile').modal('show'); // Show the modal with the specified ID
+    });
   });
           
 

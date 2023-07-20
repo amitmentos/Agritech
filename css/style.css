@@ -24,6 +24,9 @@ header {
     background-image: url("../images/login.jpeg");
 }
 
+#emailError{
+    color: #dc3545;
+}
 .logIn_form {
     display: flex;
     flex-direction: column;
@@ -262,6 +265,9 @@ a.card-link {
     border-right: none;
 }
 
+#penalySumNum{
+    color: #dc3545;
+}
 
 .side-menu {
     position: sticky;
@@ -346,7 +352,7 @@ a.card-link {
 }
 
 
-#colName, #colAvg{
+#colName, #colAvg, #colLevel, #colType{
     width: 100px;
 }
 .table {
@@ -358,6 +364,10 @@ a.card-link {
 
 .Details {
     margin-right: 5vw;
+}
+
+.Details:hover{
+    color: rgb(51, 51, 96);
 }
 
 .Edit {
@@ -597,7 +607,7 @@ a.card-link {
 
 
 #inputSize {
-    width: 82px;
+    width: 90px;
 }
 
 #description {

@@ -40,8 +40,10 @@ if (!empty($_POST["userEmail"])) {
         $file_tmp = $_FILES['userImage']['tmp_name'];
         $file_type = $_FILES['userImage']['type'];
 
-        $file_ext = strtolower(end(explode('.', $_FILES['userImage']['name'])));
-        $extensions = array("jpeg", "jpg", "png");
+        // $file_ext = strtolower(end(explode('.', $_FILES['userImage']['name'])));
+        $file_parts = explode('.', $_FILES['userImage']['name']);
+        $file_ext = strtolower(end($file_parts));
+        $extensions = array("jpeg", "jpg", "png","");
 
         if (in_array($file_ext, $extensions) === false) {
             $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
@@ -62,17 +64,25 @@ if (!empty($_POST["userEmail"])) {
             print_r($errors);
         }
     }
-
-    $query = "INSERT INTO tbl_229_users (`name`, email, `password`, user_type, profile_url)
-    VALUES ('$user_name','$user_email', '$user_password', '$user_type', '$file_destination')";
-
-
-
+    // Check if the email already exists in the database
+    $query = "SELECT * FROM tbl_229_users WHERE email = '$user_email'";
     $result = mysqli_query($connection, $query);
     if (!$result) {
         die("DB query failed.");
     }
-    header("Location: index.php");
+    if (mysqli_num_rows($result) > 0) {
+        $error_message = "*Email already taken.";
+    }
+    else{
+        $query = "INSERT INTO tbl_229_users (`name`, email, `password`, user_type, profile_url)
+        VALUES ('$user_name','$user_email', '$user_password', '$user_type', '$file_destination')";
+
+        $result = mysqli_query($connection, $query);
+        if (!$result) {
+            die("DB query failed.");
+        }
+        header("Location: index.php");
+    }
 }
 
 if (!empty($_GET["cropId"])) {
@@ -112,25 +122,25 @@ if (!empty($_GET["cropId"])) {
                 <div class="modal-body">
                     <form action="#" method="POST" id="signup_form" enctype="multipart/form-data">
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="userName">Name:</label>
+                            <label class="form-label" >Name:</label>
                             <input type="text" class="form-control input-field" name="userName" id="userName"
                                 placeholder="enter your name" required>
                         </div>
 
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="userEmail">Email address:</label>
+                            <label class="form-label" >Email address:</label>
                             <input type="email" class="form-control input-field" name="userEmail" id="userEmail"
                                 placeholder="enter your email" required>
                         </div>
 
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="userPassword">Password:</label>
+                            <label class="form-label" >Password:</label>
                             <input type="password" class="form-control input-field" name="userPassword"
                                 id="userPassword" placeholder="enter your password" required>
                         </div>
 
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="userType">User Type:</label>
+                            <label class="form-label" >User Type:</label>
                             <select class="form-control input-field" name="userType" >
                                 <option value="insp">Inspector</option>
                                 <option value="farmer">Farmer</option>
@@ -138,7 +148,7 @@ if (!empty($_GET["cropId"])) {
                         </div>
 
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="userImage">Profile Image:</label>
+                            <label class="form-label" >Profile Image:</label>
                             <input type="file" class="form-control" name="userImage" id="userImage">
                         </div>
 
@@ -159,12 +169,11 @@ if (!empty($_GET["cropId"])) {
         <form action="#" method="post" id="frm">
             <!-- Email input -->
             <div class="form-outline mb-4">
-                <label class="form-label" for="form2Example1">Email address:</label>
-                <input type="email" class="form-control" name="loginMail" id="loginMail" placeholder="email" required>
+            <label class="form-label" >Email address: <span id="emailError" style="display: <?php echo isset($error_message) ? 'block' : 'none'; ?>;"><?php echo isset($error_message) ? $error_message : ''; ?></span></label>                <input type="email" class="form-control" name="loginMail" id="loginMail" placeholder="email" required>
             </div>
             <!-- Password input -->
             <div class="form-outline mb-4">
-                <label class="form-label" for="form2Example2">Password:</label>
+                <label class="form-label" >Password:</label>
                 <input type="password" class="form-control" name="loginPass" id="loginPass" placeholder="password"
                     required>
             </div>

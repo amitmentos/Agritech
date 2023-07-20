@@ -13,16 +13,42 @@ if (!isset($_SESSION["user_id"]) || empty($_SESSION["user_id"])) {
     header("Location: index.php");
     exit;
 }
-if (empty($_GET["cropId"])) {
+if ($_SESSION["user_type"]!='farmer') {
     header("Location: index.php");
+}
+if (!empty($_GET["newUserName"])) {
+    $new_userName = $_GET['newUserName'];
+    $new_password = $_GET['newPassword'];
+    $user_id = intval($_SESSION["user_id"]);
+    $query = "UPDATE tbl_229_users
+                SET name = '$new_userName', password = '$new_password'
+                WHERE ID = $user_id;";
+
+    $result = mysqli_query($connection, $query);
+    if (!$result) {
+        die("DB query failed.");
+    }
+}
+$farmer_id_penalty = $_SESSION["user_id"];
+// Query to count penalties for the specific farmer_id
+$sql = "SELECT COUNT(*) AS penaltyCount FROM tbl_229_penalty WHERE farmer_id = $farmer_id_penalty";
+$result = mysqli_query($connection, $sql);
+if (!$result) {
+  die("DB query failed.");
+}
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $penaltyCount = $row["penaltyCount"];
+} else {
+    $penaltyCount = 0;
 }
 if (!empty($_POST["inputIrrigation"])) {
     $plot_name = $_POST["plotName"];
     $grain = $_POST["inputGrain"];
     $inputIrrigation = $_POST["inputIrrigation"];
     $summary = $_POST["description"];
-    $plot_id = intval($_POST['cropId']);
-    $farmer_id = intval([$_SESSION["user_id"]]);
+    // $plot_id = intval($_POST['cropId']);
+    $farmer_id = intval($_SESSION["user_id"]);
     $plot_size = intval($_POST['inputSize']);
 
     $possibleAVG = ['+12%', '+23%', '+3%', '+19%', '+35%', '-13%'];
@@ -38,19 +64,17 @@ if (!empty($_POST["inputIrrigation"])) {
     if (!$result) {
         die("DB query failed.");
     }
+    
     header("Location: index.php");
 }
 
-if (!empty($_GET["cropId"])) {
-    $plot_id = $_GET["cropId"];
-    $query = "SELECT * FROM tbl_229 WHERE plot_id = '$plot_id'";
-    $result = mysqli_query($connection, $query);
-    $row = mysqli_fetch_assoc($result);
-}
+// if (!empty($_GET["cropId"])) {
+//     $plot_id = $_GET["cropId"];
+//     $query = "SELECT * FROM tbl_229 WHERE plot_id = '$plot_id'";
+//     $result = mysqli_query($connection, $query);
+//     $row = mysqli_fetch_assoc($result);
+// }
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -75,7 +99,7 @@ if (!empty($_GET["cropId"])) {
 <body class="wrapper">
     <header>
         <div class="logo">
-            <a href="index.php" class="logo-link" title="logo"></a>
+            <a href="index.php" class="logo-link" alt="logo" title="logo"></a>
         </div>
         <div class="navigatin">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -90,11 +114,17 @@ if (!empty($_GET["cropId"])) {
                                 <a class="nav-link" aria-current="page" href="index.php">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="#">History</a>
+                            <?php if ($_SESSION["user_type"] == "farmer") {
+                                echo '<a class="nav-link selectedNav" aria-current="page" href="#">New Plot</a>';
+                                }
+                                else{
+                                echo '<a class="nav-link" aria-current="page" href="#">History</a>';
+                                }
+                            ?>
                             </li>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="penaltyList.php">Penalties</a>
+                            <a class="nav-link" href="penaltyList.php">Penalties<?php if ($_SESSION["user_type"] == "farmer"){    echo '<span class="penaltySum">(<span class="penaltySum" id="penalySumNum">' . $penaltyCount . '</span>)</span>';} ?></a>
                             </li>
                             <li class="nav-item logOutToggle">
                                 <a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
@@ -109,7 +139,9 @@ if (!empty($_GET["cropId"])) {
             </nav>
         </div>
         <div class="profilePic">
-            <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="profile picture" title="profile picture">
+            <a href="#" id="editProfilePic">
+                <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="profile picture" title="profile picture">
+            </a>
         </div>
     </header>
     <div class="main">
@@ -132,11 +164,11 @@ if (!empty($_GET["cropId"])) {
             <form action="#" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-4">
-                        <label for="plotName" class="form-label">Plot Name</label>
+                        <label class="form-label">Plot Name</label>
                         <input type="text" class="form-control input-field" id="plotName" name="plotName" placeholder="name">
                     </div>
                     <div class="col-sm-6">
-                        <label for="inputIrrigation" class="form-label">Irrigation System</label>
+                        <label  class="form-label">Irrigation System</label>
                         <select class="form-control input-field" id="inputIrrigation" name="inputIrrigation">
                             <option value="" disabled selected>Select irrigation system</option>
                             <option value="drip">Drip Irrigation</option>
@@ -149,19 +181,19 @@ if (!empty($_GET["cropId"])) {
                 <!-- Second row -->
                 <div class="row">
                     <div class="col-sm-6">
-                        <label for="inputGrain" class="form-label">Type of Grain</label>
+                        <label  class="form-label">Type of Grain</label>
                         <input type="text" class="form-control input-field" id="inputGrain" name="inputGrain" placeholder="type of grain" required>
                     </div>
                     <div class="col-sm-6">
-                        <label for="inputSize" class="form-label">Plot size</label>
-                        <input type="number" class="form-control input-field" id="inputSize" name="inputSize" min="1" placeholder="size" required>
+                        <label  class="form-label">Plot size</label>
+                        <input type="number" class="form-control input-field" id="inputSize" name="inputSize" min="1" placeholder="size(m)" required>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="description" class="form-label">Describe</label>
+                    <label  class="form-label">Describe</label>
                     <textarea class="form-control" id="description" name="description" placeholder="More details..."></textarea>
                 </div>
-                <input type="text" name="cropId" <?php echo 'value="' . $_GET["cropId"] . '"'; ?> hidden>
+                <!-- <input type="text" name="cropId" <?php echo 'value="' . $_GET["cropId"] . '"'; ?> hidden> -->
                 <div class="newPenaltyButton">
                     <div id="BACK" class="col-md-6">
                         <button type="button" class="btn btn-primary" onclick="window.location.href='crop.php'">BACK</button>
@@ -173,7 +205,42 @@ if (!empty($_GET["cropId"])) {
             </form>
         </div>
     </div>
+    <div class="modal fade" id="editModalProfile" tabindex="-1" aria-labelledby="editModalProfile" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editModalProfile">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="#" method="GET" id="frm">
 
+                  <div class="form-outline mb-4">
+                    <label class="form-label" >User Name:</label>
+                    <input type="text" class="form-control" name="newUserName" placeholder="name" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" >Password:</label>
+                    <input type="text" class="form-control" name="newPassword" placeholder="password" required>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="ModalBtnN" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="ModalBtnY" class="btn btn-primary">Save changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#editProfilePic').on('click', function(event) {
+                event.preventDefault(); // Prevent the link's default action
+                $('#editModalProfile').modal('show'); // Show the modal with the specified ID
+                });
+            });
+        </script>
 </body>
 
 </html>

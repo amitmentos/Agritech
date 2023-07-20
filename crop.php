@@ -8,6 +8,22 @@ if (mysqli_connect_errno()) {
 ?>
 <?php
 session_start();
+if (empty($_GET["cropId"])) {
+  header("Location: index.php");
+}
+if (!empty($_GET["newUserName"])) {
+  $new_userName = $_GET['newUserName'];
+  $new_password = $_GET['newPassword'];
+  $user_id = intval($_SESSION["user_id"]);
+  $query = "UPDATE tbl_229_users
+              SET name = '$new_userName', password = '$new_password'
+              WHERE ID = $user_id;";
+
+  $result = mysqli_query($connection, $query);
+  if (!$result) {
+    die("DB query failed.");
+  }
+}
 if (!empty($_GET["plotName"])) {
   $plot_name = $_GET['plotName'];
   $plot_size = $_GET['plotSize'];
@@ -32,12 +48,26 @@ if (!empty($_GET["selectYes"])) {
   }
   header("Location: index.php");
 }
+$farmer_id_penalty = $_SESSION["user_id"];
+// Query to count penalties for the specific farmer_id
+$sql = "SELECT COUNT(*) AS penaltyCount FROM tbl_229_penalty WHERE farmer_id = $farmer_id_penalty";
+$result = mysqli_query($connection, $sql);
+if (!$result) {
+  die("DB query failed.");
+}
+if ($result) {
+  $row = mysqli_fetch_assoc($result);
+  $penaltyCount = $row["penaltyCount"];
+} else {
+  $penaltyCount = 0;
+}
 if (!empty($_GET["cropId"])) {
   $plot_id = $_GET["cropId"];
   $query = "SELECT * FROM tbl_229 WHERE plot_id = '$plot_id'";
   $result = mysqli_query($connection, $query);
   $row = mysqli_fetch_assoc($result);
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -77,10 +107,16 @@ if (!empty($_GET["cropId"])) {
                 <a class="nav-link" aria-current="page" href="index.php">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">History</a>
+                <?php if ($_SESSION["user_type"] == "farmer") {
+                      echo '<a class="nav-link" aria-current="page" href="newPlot.php">New Plot</a>';
+                    }
+                    else{
+                      echo '<a class="nav-link" aria-current="page" href="#">History</a>';
+                    }
+                ?>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="penaltyList.php">Penalties</a>
+              <a class="nav-link" href="penaltyList.php">Penalties<?php if ($_SESSION["user_type"] == "farmer"){    echo '<span class="penaltySum">(<span class="penaltySum" id="penalySumNum">' . $penaltyCount . '</span>)</span>';} ?></a>
               </li>
               <li class="nav-item logOutToggle">
                   <a id="logout" href="login.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
@@ -95,7 +131,9 @@ if (!empty($_GET["cropId"])) {
       </nav>
     </div>
     <div class="profilePic">
-      <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="profile picture" title="profile picture">
+      <a href="#" id="editProfilePic">
+        <img <?php echo 'src=' . $_SESSION['user_img'] . '' ?> alt="profile picture" title="profile picture">
+      </a>
     </div>
   </header>
   <div class="main">
@@ -148,12 +186,12 @@ if (!empty($_GET["cropId"])) {
                 <form action="#" method="GET" id="frm">
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="plotName">Plot Name:</label>
+                    <label class="form-label" >Plot Name:</label>
                     <input type="text" class="form-control" name="plotName" placeholder="name" required>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="plotSize">Plot Size:</label>
+                    <label class="form-label" >Plot Size:</label>
                     <input type="number" class="form-control" name="plotSize" placeholder="size" min=1 required>
                   </div>
 
@@ -176,12 +214,42 @@ if (!empty($_GET["cropId"])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <form action="#" method="GET" id="frm">
+                <form  method="GET" id="frm">
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="plotName">Are You Sure You Want To Delete This Plot?</label>
+                    <label class="form-label" >Are You Sure You Want To Delete This Plot?</label>
                   </div>
                   <input type="text" name="cropId" <?php echo 'value="' . $row["plot_id"] . '"'; ?> hidden>
                   <input type="text" name="selectYes" value="1" hidden>
+                  <div class="modal-footer">
+                    <button type="button" id="ModalBtnN" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="ModalBtnY" class="btn btn-primary">Save changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="editModalProfile" tabindex="-1" aria-labelledby="editModalProfile" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editModalProfile">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="#" method="GET" id="frm">
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" >User Name:</label>
+                    <input type="text" class="form-control" name="newUserName" placeholder="name" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" >Password:</label>
+                    <input type="text" class="form-control" name="newPassword" placeholder="password" required>
+                  </div>
+                  <input type="text" name="cropId" <?php echo 'value="' . $row["plot_id"] . '"'; ?> hidden>
                   <div class="modal-footer">
                     <button type="button" id="ModalBtnN" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" id="ModalBtnY" class="btn btn-primary">Save changes</button>
@@ -215,10 +283,6 @@ if (!empty($_GET["cropId"])) {
       </div>
       <canvas id="myChart" class="hide-chart"></canvas>
       <canvas id="myChart2" class="hide-chart2"></canvas>
-    </div>
-
   </div>
 </body>
-
-
 </html>
